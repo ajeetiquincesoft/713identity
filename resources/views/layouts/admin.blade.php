@@ -110,14 +110,14 @@
                                 <span class="nav-link-text">Users</span>
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item"><a class="nav-link" href="#">Coach</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#">Client</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index',['type'=>1]) }}">Doctors</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('user.index',['type'=>0]) }}">Patients</a></li>
 
                             </ul>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('page.index') }}">
                                 <i class="fas fa-pager"></i>
                                 <span class="nav-link-text">Static Pages</span>
                             </a>
@@ -136,13 +136,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.profile') }}">
                                 <i class="ni ni-single-02"></i>
                                 <span class="nav-link-text">Profile</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('admin.password') }}">
                                 <i class="ni ni-key-25"></i>
                                 <span class="nav-link-text">Change Password</span>
                             </a>

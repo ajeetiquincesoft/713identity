@@ -25,7 +25,8 @@ Auth::routes([
 
 Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
-
-
+    Route::resource('user', 'UserController');
+    Route::match(['get', 'put'], 'profile', 'UserController@profile')->name('admin.profile');
+    Route::match(['get', 'put'], 'change-password', 'UserController@updatePassword')->name('admin.password');
+    Route::resource('page', 'PageController');
 });
