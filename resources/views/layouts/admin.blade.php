@@ -130,7 +130,7 @@
                         </li>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ route('template.index') }}">
                                 <i class="fas fa-envelope-square"></i>
                                 <span class="nav-link-text">Email Templates</span>
                             </a>
