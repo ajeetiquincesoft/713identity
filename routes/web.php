@@ -30,4 +30,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::match(['get', 'put'], 'change-password', 'UserController@updatePassword')->name('admin.password');
     Route::resource('page', 'PageController');
     Route::resource('template', 'TemplateController');
+    Route::resource('category', 'CategoryController');
 });

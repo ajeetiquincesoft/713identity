@@ -123,11 +123,17 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{route('category.index')}}">
+                            <i class="ni ni-planet"></i>
+                                <span class="nav-link-text">Treatment Categories</span>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-comments"></i>
                                 <span class="nav-link-text">Feedbacks</span>
                             </a>
-                        </li>
+                        </li> -->
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('template.index') }}">
