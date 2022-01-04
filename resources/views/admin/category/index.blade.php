@@ -50,18 +50,18 @@
                                 <a href="{{ route('category.edit', $datas->id) }}" class="text-white">
                                     <span class="mr-2"><i class="fa fa-edit" title="Edit User"></i></span>
                                 </a>
-                               <!-- <span> {!! Form::open([
+                               <span> {!! Form::open([
                                           'method'=>'DELETE',
-                                          'route' => ['template.destroy', $datas->id],
+                                          'route' => ['category.destroy', $datas->id],
                                           'style' => 'display:inline'
                                           ]) !!}
                                             {!! Form::button('<i class="fa fa-trash text-danger" aria-hidden="true"></i>', array(
                                           'type' => 'submit',
                                           'class' => 'btn',
-                                          'title' => 'Delete Template',
-                                          'onclick'=>'return confirm("Are you sure about deleting template?")'
+                                          'title' => 'Delete Category',
+                                          'onclick'=>'return confirm("Are you sure about deleting?")'
                                           )) !!}
-                                          {!! Form::close() !!}</span>-->
+                                          {!! Form::close() !!}</span>
                             </td>
                         </tr>
                         @endforeach
