@@ -31,4 +31,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::resource('page', 'PageController');
     Route::resource('template', 'TemplateController');
     Route::resource('category', 'CategoryController');
+    Route::resource('treatment', 'TreatmentController');
 });

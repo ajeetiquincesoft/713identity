@@ -117,15 +117,21 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('page.index') }}">
-                                <i class="fas fa-pager"></i>
-                                <span class="nav-link-text">Static Pages</span>
+                            <a class="nav-link" href="{{route('category.index')}}">
+                                <i class="ni ni-planet"></i>
+                                <span class="nav-link-text">Treatment Categories</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('category.index')}}">
-                            <i class="ni ni-planet"></i>
-                                <span class="nav-link-text">Treatment Categories</span>
+                            <a class="nav-link" href="{{route('treatment.index')}}">
+                                <i class="fas fa-laptop-medical"></i>
+                                <span class="nav-link-text">Treatments</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('page.index') }}">
+                                <i class="fas fa-pager"></i>
+                                <span class="nav-link-text">Static Pages</span>
                             </a>
                         </li>
                         <!-- <li class="nav-item">
