@@ -232,14 +232,16 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+    ],
         'twilio' => [
             'TWILIO_AUTH_TOKEN'  => env('TWILIO_AUTH_TOKEN'),
-            'TWILIO_ACCOUNT_SID' => env('TWILIO_ACCOUNT_SID')
+            'TWILIO_ACCOUNT_SID' => env('TWILIO_ACCOUNT_SID'),
+            'TWILIO_NUMBER' => env('TWILIO_NUMBER'),
         ],
         'stripe_key' => env('STRIPE_KEY'),
         'stripe_test' => env('STRIPE_TEST'),
         'stripe_publish_key' => env('STRIPE_PUBLIC_KEY'),
 
-    ],
+   
 
 ];

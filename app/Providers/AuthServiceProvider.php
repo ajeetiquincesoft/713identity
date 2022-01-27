@@ -15,6 +15,12 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
     ];
+	
+	public function register () {
+        $this->app['auth']->provider('otp-based-auth-provider', function ($app, array $config) {
+            return new MemberUserProvider();
+        });
+    }
 
     /**
      * Register any authentication / authorization services.

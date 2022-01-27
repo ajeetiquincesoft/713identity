@@ -15,7 +15,7 @@ return [
 
     'defaults' => [
         'guard' => 'web',
-        'passwords' => 'users',
+        //'passwords' => 'users',
     ],
 
     /*
@@ -39,6 +39,10 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+		'api' => [
+            'driver' => 'jwt',
+            'provider' => 'otp-user',
         ],
     ],
 
@@ -64,6 +68,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+		'otp-user'=>[
+		'driver'=>'otp-based-auth-provider'
+		],
 
         // 'users' => [
         //     'driver' => 'database',
