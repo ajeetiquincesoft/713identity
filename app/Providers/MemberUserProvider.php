@@ -31,7 +31,8 @@ class MemberUserProvider implements UserProvider
     public function validateCredentials (Authenticatable $user, array $credentials) {
         $otp = $credentials['otp'];
         $phone = $credentials['phone'];
+        $status = $credentials['status'];
 
-        return User::where('phone', $phone)->where('otp',$otp)->first();
+        return User::where('phone', $phone)->where('otp',$otp)->where('status',$status)->first();
     }
 }

@@ -19,6 +19,7 @@ class JwtMiddleware extends BaseMiddleware
      */
     public function handle($request, Closure $next)
     {
+        // dd($request->all());
         try {
             $user = auth('api')->authenticate();
         } catch (Exception $e) {

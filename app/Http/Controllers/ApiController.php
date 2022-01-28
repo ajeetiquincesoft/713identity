@@ -24,7 +24,7 @@ class ApiController extends Controller
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->messages()], 200);
             }
-           // $credentials['status'] = 1;
+           $credentials['status'] = 1;
             try {
                 if (!$token = auth('api')->attempt($credentials)) {
 
@@ -129,14 +129,13 @@ class ApiController extends Controller
     public function get_user(Request $request)
 	{
 
-        // dd($request->token);
-		// $this->validate($request, [
-		// 	'token' => 'required'
-		// ]);
+		$this->validate($request, [
+			'token' => 'required'
+		]);
 
-		$user = Auth('api')->authenticate('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcLzcxM2lkZW50aXR5XC9wdWJsaWNcL2FwaVwvbG9naW4iLCJpYXQiOjE2NDMyODY2MTUsImV4cCI6MTY0MzI5MDIxNSwibmJmIjoxNjQzMjg2NjE1LCJqdGkiOiJaNjFVcnl4dVZmejVtTG9sIiwic3ViIjoyMywicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.KyFaVRGqBpxuQmakW1Z3mt-PDJKfXlX4pm7reNw9IEg');
+		$user = Auth('api')->authenticate($request->token);
 
-        dd($user);
+        return response()->json(['user' => $user]);
 
     }
 
