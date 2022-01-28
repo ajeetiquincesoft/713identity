@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Models\User;
+use App\Models\Member;
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
@@ -19,13 +19,13 @@ class MemberUserProvider implements UserProvider
     }
 
     public function retrieveById ($identifier) {
-        return User::find($identifier);
+        return Member::find($identifier);
     }
 
     public function retrieveByCredentials (array $credentials) {
         $phone = $credentials['phone'];
 
-        return User::where('phone', $phone)->first();
+        return Member::where('phone', $phone)->first();
     }
 
     public function validateCredentials (Authenticatable $user, array $credentials) {
@@ -33,6 +33,6 @@ class MemberUserProvider implements UserProvider
         $phone = $credentials['phone'];
         $status = $credentials['status'];
 
-        return User::where('phone', $phone)->where('otp',$otp)->where('status',$status)->first();
+        return Member::where('phone', $phone)->where('otp',$otp)->where('status',$status)->first();
     }
 }

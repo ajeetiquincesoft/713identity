@@ -4,14 +4,11 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-//use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements JWTSubject, Authenticatable
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -52,7 +49,14 @@ class User extends Model implements JWTSubject, Authenticatable
         'otp_expire' => 'datetime',
     ];
 
-   
+   /*  public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims()
+    {
+        return [];
+    } */
 
     function generateCodeNumber() {
         $number = mt_rand(1,9999); // better than rand()
@@ -71,36 +75,4 @@ class User extends Model implements JWTSubject, Authenticatable
         // for instance, it might look like this in Laravel
         return User::whereOtp($number)->exists();
         }
-		
-		 public function getJWTIdentifier () {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims () {
-        return [];
-    }
-
-    public function getAuthIdentifierName () {
-        // TODO: Implement getAuthIdentifierName() method.
-    }
-
-    public function getAuthIdentifier () {
-        // TODO: Implement getAuthIdentifier() method.
-    }
-
-    public function getAuthPassword () {
-        // TODO: Implement getAuthPassword() method.
-    }
-
-    public function getRememberToken () {
-        // TODO: Implement getRememberToken() method.
-    }
-
-    public function setRememberToken ($value) {
-        // TODO: Implement setRememberToken() method.
-    }
-
-    public function getRememberTokenName () {
-        // TODO: Implement getRememberTokenName() method.
-    }
 }
