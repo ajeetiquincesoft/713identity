@@ -31,7 +31,7 @@ class ApiController extends Controller
 
                     return response()->json([
                         'success' => false,
-                        'message' => 'Login credentials are invalid.',
+                        'message' => 'Invalid otp.',
 
                     ], 400);
                 }
