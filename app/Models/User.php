@@ -59,7 +59,7 @@ class User extends Authenticatable
     } */
 
     function generateCodeNumber() {
-        $number = mt_rand(1,9999); // better than rand()
+        $number = mt_rand(1000,9999); // better than rand()
     
         // call the same function if the barcode exists already
         if ($this->CodeNumberExists($number)) {
