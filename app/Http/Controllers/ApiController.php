@@ -168,4 +168,35 @@ class ApiController extends Controller
 			], Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
 	}
+    public function updateProfile(Request $request)
+	{
+
+		$validator = Validator::make($request->all(), [
+			'token' => 'required',
+			'name' => 'required|string'
+		]);
+		if ($validator->fails()) {
+			return response()->json(['error' => $validator->messages()], 200);
+		}
+		$user = auth('api')->authenticate($request->token);
+		if ($user) {
+			$user->name = $request->name;
+			$user->email = $request->email;
+			
+			if ($request->profile_pic) {
+				$frontimage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->profile_pic));
+				$profile_pic = time() . '.jpeg';
+				// $new_path = Storage::disk('public')->put($profile_pic, $frontimage);
+				file_put_contents($profile_pic, $frontimage);
+				$user->profile_pic = $profile_pic;
+			}
+			$user->save();
+			return response()->json(['success' => true, 'message' => 'Profile updated successfully']);
+		} else {
+			return response()->json([
+				'success' => false,
+				'message' => 'Token is not valid. please contact to the admin.',
+			]);
+		}
+	}
 }

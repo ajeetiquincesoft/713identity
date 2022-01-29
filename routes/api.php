@@ -20,4 +20,5 @@ Route::post('login', [ApiController::class, 'loginAndRegister']);
 Route::group(['middleware' => ['jwt.verify']], function () {
 Route::get('get_user', [ApiController::class, 'get_user']);
 Route::get('logout', [ApiController::class, 'logout']);
+Route::post('update-profile',[ApiController::class,'updateProfile']);
 });
