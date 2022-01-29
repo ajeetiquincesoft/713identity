@@ -19,6 +19,7 @@ class CreateTreatmentOptionPackagesTable extends Migration
 			$table->foreign('treatment_id')->references('id')->on('treatments')->onDelete('cascade');
 			$table->bigInteger('treatmentoption_id')->unsigned();
 			$table->foreign('treatmentoption_id')->references('id')->on('treatment_options')->onDelete('cascade');
+            $table->string('small_name')->nullable();
             $table->string('name')->nullable();
 			$table->string('packagetype')->nullable();
 			$table->string('price')->nullable();

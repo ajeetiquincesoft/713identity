@@ -23,6 +23,7 @@ class CreateTreatmentsTable extends Migration
             $table->string('description')->nullable();
             $table->longText('image')->nullable();
             $table->integer('status')->default(1); 
+            $table->integer('popular')->default(0); 
             $table->timestamps();
         });
     }

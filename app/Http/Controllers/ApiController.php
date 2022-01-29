@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Treatment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -199,4 +200,15 @@ class ApiController extends Controller
 			]);
 		}
 	}
+
+    public function getPopularTreatment(){
+        $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('popular',1)->where('status',1)->paginate(100);
+
+        return response()->json(['treatment' => $treatment]);
+    }
+    public function getTreatment(){
+        $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('status',1)->paginate(20);
+
+        return response()->json(['treatment' => $treatment]);
+    }
 }

@@ -17,6 +17,8 @@ use App\Http\Controllers\ProductController;
 */
 
 Route::post('login', [ApiController::class, 'loginAndRegister']);
+Route::get('treatment', [ApiController::class, 'getTreatment']);
+Route::get('popular-treatment', [ApiController::class, 'getPopularTreatment']);
 Route::group(['middleware' => ['jwt.verify']], function () {
 Route::get('get_user', [ApiController::class, 'get_user']);
 Route::get('logout', [ApiController::class, 'logout']);
