@@ -204,11 +204,11 @@ class ApiController extends Controller
     public function getPopularTreatment(){
         $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('popular',1)->where('status',1)->paginate(100);
 
-        return response()->json(['treatment' => $treatment]);
+        return response()->json(['sucess'=>true,'message'=>'popular treatments','treatment' => $treatment]);
     }
     public function getTreatment(){
         $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('status',1)->paginate(20);
 
-        return response()->json(['treatment' => $treatment]);
+        return response()->json(['sucess'=>true,'message'=>'treatments','treatment' => $treatment]);
     }
 }

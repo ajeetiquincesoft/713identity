@@ -129,6 +129,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{route('availability')}}">
+                                <i class="fas fa-clock"></i>
+                                <span class="nav-link-text">Availability</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('page.index') }}">
                                 <i class="fas fa-pager"></i>
                                 <span class="nav-link-text">Static Pages</span>

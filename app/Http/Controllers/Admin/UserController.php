@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Availability;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -148,11 +149,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-       //
-       $user = User::findOrFail($id);
-       $user->delete();
+        //
+        $user = User::findOrFail($id);
+        $user->delete();
 
-       return back()->withSuccess('User deleted successfully');
+        return back()->withSuccess('User deleted successfully');
     }
 
     public function updatePassword(Request $request)
@@ -182,28 +183,73 @@ class UserController extends Controller
         return view('admin/change-password');
     }
 
-     // get admin profile
-     public function  profile(Request $request){
+    // get admin profile
+    public function  profile(Request $request)
+    {
         $input = $request->all();
-        if($input){
+        if ($input) {
             $validatedData = $request->validate([
-                'name'  =>'required',
-                'email'  =>'required|email'
+                'name'  => 'required',
+                'email'  => 'required|email'
             ]);
-            try{
+            try {
 
                 $user = User::findOrFail(Auth::User()->id);
                 $user->name = $request->name;
                 $user->email = $request->email;
                 $user->save();
 
-                return back()->with('success','Profile updated successfully');
-            }catch (\Exception $e){
+                return back()->with('success', 'Profile updated successfully');
+            } catch (\Exception $e) {
                 return back()->withErrors($e->getMessage());
             }
-
         }
 
         return view('admin/profile');
+    }
+
+    public function Availability()
+    {
+        $data = Availability::all();
+        return view('admin/availability/index',compact('data'));
+    }
+    public function CreateAvailability()
+    {
+        return view('admin/availability/create');
+    }
+
+    public function PostCreateAvailability(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'days' => 'required',
+        ]);
+        foreach ($request->days as $day) {
+            $availability = Availability::where('days', $day)->first();
+            if ($availability) {
+                $availability->morning_time = serialize($request->morning_time);
+                $availability->afternoon_time = serialize($request->afternoon_time);
+                $availability->evening_time = serialize($request->evening_time);
+                $availability->save();
+               
+            } else {
+                $availability = Availability::make();
+                $availability->days = $day;
+                $availability->morning_time = serialize($request->morning_time);
+                $availability->afternoon_time = serialize($request->afternoon_time);
+                $availability->evening_time = serialize($request->evening_time);
+                $availability->save();
+                
+            }
+        }
+        return redirect()->route('availability')->withSuccess('slot added successfully');
+     
+    }
+
+    public function DeleteAvailability($id){
+        $availability = Availability::findOrFail($id);
+        $availability->delete();
+
+        return back()->withSuccess('deleted successfully');
     }
 }

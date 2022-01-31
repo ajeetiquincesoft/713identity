@@ -33,4 +33,7 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::resource('category', 'CategoryController');
     Route::resource('treatment', 'TreatmentController');
     Route::get('availability','UserController@Availability')->name('availability');
+    Route::get('create_availability','UserController@CreateAvailability')->name('creatavailability');
+    Route::post('create_availability','UserController@PostCreateAvailability')->name('postcreatavailability');
+    Route::delete('delete_availability/{id}','UserController@DeleteAvailability')->name('availability.destroy');
 });
