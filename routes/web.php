@@ -32,4 +32,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::resource('template', 'TemplateController');
     Route::resource('category', 'CategoryController');
     Route::resource('treatment', 'TreatmentController');
+    Route::get('availability','UserController@Availability')->name('availability');
 });
