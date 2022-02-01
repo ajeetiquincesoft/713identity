@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Treatment;
 use App\Models\User;
 use Carbon\Carbon;
@@ -16,7 +17,7 @@ class ApiController extends Controller
     {
         // dd($request->all());
         if ($request->otp) {
-            $credentials = $request->only('phone','otp');
+            $credentials = $request->only('phone', 'otp');
             $validator = Validator::make($request->all(), [
                 'phone' => 'required',
                 'otp' => 'required'
@@ -25,7 +26,7 @@ class ApiController extends Controller
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->messages()], 200);
             }
-           $credentials['status'] = 1;
+            $credentials['status'] = 1;
             try {
                 if (!$token = auth('api')->attempt($credentials)) {
 
@@ -128,87 +129,136 @@ class ApiController extends Controller
     }
 
     public function get_user(Request $request)
-	{
+    {
 
-		$this->validate($request, [
-			'token' => 'required'
-		]);
+        $this->validate($request, [
+            'token' => 'required'
+        ]);
 
-		$user = Auth('api')->authenticate($request->token);
+        $user = Auth('api')->authenticate($request->token);
 
         return response()->json(['user' => $user]);
-
     }
 
     public function logout(Request $request)
-	{
+    {
 
         // dd($request->all());
-		//valid credential
-		$validator = Validator::make($request->only('token'), [
-			'token' => 'required'
-		]);
+        //valid credential
+        $validator = Validator::make($request->only('token'), [
+            'token' => 'required'
+        ]);
 
-		//Send failed response if request is not valid
-		if ($validator->fails()) {
-			return response()->json(['error' => $validator->messages()], 200);
-		}
+        //Send failed response if request is not valid
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
 
-		//Request is validated, do logout        
-		try {
-			auth('api')->invalidate($request->token);
+        //Request is validated, do logout        
+        try {
+            auth('api')->invalidate($request->token);
 
-			return response()->json([
-				'success' => true,
-				'message' => 'User has been logged out'
-			]);
-		} catch (JWTException $exception) {
-			return response()->json([
-				'success' => false,
-				'message' => 'Sorry, user cannot be logged out'
-			], Response::HTTP_INTERNAL_SERVER_ERROR);
-		}
-	}
-    public function updateProfile(Request $request)
-	{
-
-		$validator = Validator::make($request->all(), [
-			'token' => 'required',
-			'name' => 'required|string'
-		]);
-		if ($validator->fails()) {
-			return response()->json(['error' => $validator->messages()], 200);
-		}
-		$user = auth('api')->authenticate($request->token);
-		if ($user) {
-			$user->name = $request->name;
-			$user->email = $request->email;
-			
-			if ($request->profile_pic) {
-				$frontimage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->profile_pic));
-				$profile_pic = time() . '.jpeg';
-				// $new_path = Storage::disk('public')->put($profile_pic, $frontimage);
-				file_put_contents($profile_pic, $frontimage);
-				$user->profile_pic = $profile_pic;
-			}
-			$user->save();
-			return response()->json(['success' => true, 'message' => 'Profile updated successfully']);
-		} else {
-			return response()->json([
-				'success' => false,
-				'message' => 'Token is not valid. please contact to the admin.',
-			]);
-		}
-	}
-
-    public function getPopularTreatment(){
-        $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('popular',1)->where('status',1)->paginate(100);
-
-        return response()->json(['sucess'=>true,'message'=>'popular treatments','treatment' => $treatment]);
+            return response()->json([
+                'success' => true,
+                'message' => 'User has been logged out'
+            ]);
+        } catch (JWTException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, user cannot be logged out'
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-    public function getTreatment(){
-        $treatment = Treatment::with(['treatmentOption','treatmentOption.treatmentOptionPackage','category'])->where('status',1)->paginate(20);
+    public function updateProfile(Request $request)
+    {
 
-        return response()->json(['sucess'=>true,'message'=>'treatments','treatment' => $treatment]);
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'name' => 'required|string'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+
+            if ($request->profile_pic) {
+                $frontimage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $request->profile_pic));
+                $profile_pic = time() . '.jpeg';
+                // $new_path = Storage::disk('public')->put($profile_pic, $frontimage);
+                file_put_contents($profile_pic, $frontimage);
+                $user->profile_pic = $profile_pic;
+            }
+            $user->save();
+            return response()->json(['success' => true, 'message' => 'Profile updated successfully']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function getPopularTreatment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $treatment = Treatment::with(['treatmentOption', 'treatmentOption.treatmentOptionPackage', 'category'])->where('popular', 1)->where('status', 1)->paginate(100);
+
+            return response()->json(['sucess' => true, 'message' => 'popular treatments', 'treatment' => $treatment]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+    public function getTreatment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $treatment = Treatment::with(['treatmentOption', 'treatmentOption.treatmentOptionPackage', 'category'])->where('status', 1)->paginate(20);
+
+            return response()->json(['sucess' => true, 'message' => 'treatments', 'treatment' => $treatment]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function getCategoryWithTreatment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $category = Category::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage'])->where('status', 1)->get();
+            return response()->json(['sucess' => true, 'message' => 'Category treatments', 'category' => $category]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
     }
 }

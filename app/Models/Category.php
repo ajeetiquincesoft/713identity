@@ -11,4 +11,8 @@ class Category extends Model
     protected $guarded = [
        
     ];
+
+    public  function treatment(){
+        return $this->hasMany(Treatment::class,'category_id','id')->where('status',1);
+    }
 }
