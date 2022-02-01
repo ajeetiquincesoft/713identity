@@ -24,4 +24,5 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     // Route::get('treatment', [ApiController::class, 'getTreatment']);
     Route::get('popular-treatment', [ApiController::class, 'getPopularTreatment']);
     Route::get('category-treatment', [ApiController::class, 'getCategoryWithTreatment']);
+    Route::get('availability', [ApiController::class, 'getAvailability']);
 });

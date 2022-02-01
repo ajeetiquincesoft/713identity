@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Availability;
 use App\Models\Category;
 use App\Models\Treatment;
 use App\Models\User;
@@ -213,7 +214,7 @@ class ApiController extends Controller
         if ($user) {
             $treatment = Treatment::with(['treatmentOption', 'treatmentOption.treatmentOptionPackage', 'category'])->where('popular', 1)->where('status', 1)->paginate(100);
 
-            return response()->json(['sucess' => true, 'message' => 'popular treatments', 'treatment' => $treatment]);
+            return response()->json(['success' => true, 'message' => 'popular treatments', 'treatment' => $treatment]);
         } else {
             return response()->json([
                 'success' => false,
@@ -233,7 +234,7 @@ class ApiController extends Controller
         if ($user) {
             $treatment = Treatment::with(['treatmentOption', 'treatmentOption.treatmentOptionPackage', 'category'])->where('status', 1)->paginate(20);
 
-            return response()->json(['sucess' => true, 'message' => 'treatments', 'treatment' => $treatment]);
+            return response()->json(['success' => true, 'message' => 'treatments', 'treatment' => $treatment]);
         } else {
             return response()->json([
                 'success' => false,
@@ -253,7 +254,27 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             $category = Category::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage'])->where('status', 1)->get();
-            return response()->json(['sucess' => true, 'message' => 'Category treatments', 'category' => $category]);
+            return response()->json(['success' => true, 'message' => 'Category treatments', 'category' => $category]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function getAvailability(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $availability = Availability::where('status', 1)->get();
+            return response()->json(['success' => true, 'message' => 'Category treatments', 'availability' => $availability]);
         } else {
             return response()->json([
                 'success' => false,
