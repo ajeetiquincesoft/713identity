@@ -211,7 +211,7 @@ class UserController extends Controller
     public function Availability()
     {
         $data = Availability::all();
-        return view('admin/availability/index',compact('data'));
+        return view('admin/availability/index', compact('data'));
     }
     public function CreateAvailability()
     {
@@ -227,29 +227,32 @@ class UserController extends Controller
         foreach ($request->days as $day) {
             $availability = Availability::where('days', $day)->first();
             if ($availability) {
-                $availability->morning_time = serialize($request->morning_time);
-                $availability->afternoon_time = serialize($request->afternoon_time);
-                $availability->evening_time = serialize($request->evening_time);
+                $availability->morning_time = ($request->morning_time)?serialize($request->morning_time):'';
+                $availability->afternoon_time = ($request->afternoon_time)?serialize($request->afternoon_time):'';
+                $availability->evening_time = ($request->evening_time)?serialize($request->evening_time):'';
                 $availability->save();
-               
             } else {
                 $availability = Availability::make();
                 $availability->days = $day;
-                $availability->morning_time = serialize($request->morning_time);
-                $availability->afternoon_time = serialize($request->afternoon_time);
-                $availability->evening_time = serialize($request->evening_time);
+                $availability->morning_time = ($request->morning_time)?serialize($request->morning_time):'';
+                $availability->afternoon_time = ($request->afternoon_time)?serialize($request->afternoon_time):'';
+                $availability->evening_time = ($request->evening_time)?serialize($request->evening_time):'';
                 $availability->save();
-                
             }
         }
         return redirect()->route('availability')->withSuccess('slot added successfully');
-     
     }
 
-    public function DeleteAvailability($id){
+    public function DeleteAvailability($id)
+    {
         $availability = Availability::findOrFail($id);
         $availability->delete();
 
         return back()->withSuccess('deleted successfully');
+    }
+    public function editAvailability($id)
+    {
+        $data = Availability::find($id);
+        return view('admin/availability/edit', ['data' => $data]);
     }
 }

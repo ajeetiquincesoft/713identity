@@ -51,9 +51,9 @@
                             <td>{{ (unserialize($datas->evening_time))?implode(',',unserialize($datas->evening_time)):'' }}</td>
 
                             <td>
-                                <!-- <a href="{{ route('category.edit', $datas->id) }}" class="text-white">
+                                <a href="{{ route('availability.edit', $datas->id) }}" class="text-white">
                                     <span class="mr-2"><i class="fa fa-edit" title="Edit User"></i></span>
-                                </a> -->
+                                </a>
                                <span> {!! Form::open([
                                           'method'=>'DELETE',
                                           'route' => ['availability.destroy', $datas->id],

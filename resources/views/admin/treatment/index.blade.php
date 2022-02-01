@@ -34,7 +34,6 @@
                         <tr>
                             <th scope="col">id</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Created at</th>
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
@@ -43,8 +42,9 @@
                         @foreach($data as $key =>$datas)
                         <tr>
                             <td class="budget">{{ ++$key }}</td>
-                            <td>{{ $datas->name }}</td>                            
-                            <td>{{ $datas->created_at->format('d M Y h:i a') }}</td>
+                            <td>{{ $datas->title }}</td>                            
+                                                 
+                            
 
                             <td>
                                 <a href="{{ route('treatment.edit', $datas->id) }}" class="text-white">
