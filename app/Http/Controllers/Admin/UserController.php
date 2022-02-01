@@ -221,22 +221,25 @@ class UserController extends Controller
     public function PostCreateAvailability(Request $request)
     {
 
+    
         $validatedData = $request->validate([
             'days' => 'required',
         ]);
         foreach ($request->days as $day) {
             $availability = Availability::where('days', $day)->first();
             if ($availability) {
-                $availability->morning_time = ($request->morning_time)?serialize($request->morning_time):'';
-                $availability->afternoon_time = ($request->afternoon_time)?serialize($request->afternoon_time):'';
-                $availability->evening_time = ($request->evening_time)?serialize($request->evening_time):'';
+                $availability->morning_time = ($request->morning_time) ? serialize($request->morning_time) : '';
+                $availability->afternoon_time = ($request->afternoon_time) ? serialize($request->afternoon_time) : '';
+                $availability->evening_time = ($request->evening_time) ? serialize($request->evening_time) : '';
+                $availability->status = $request->status;
                 $availability->save();
             } else {
                 $availability = Availability::make();
                 $availability->days = $day;
-                $availability->morning_time = ($request->morning_time)?serialize($request->morning_time):'';
-                $availability->afternoon_time = ($request->afternoon_time)?serialize($request->afternoon_time):'';
-                $availability->evening_time = ($request->evening_time)?serialize($request->evening_time):'';
+                $availability->morning_time = ($request->morning_time) ? serialize($request->morning_time) : '';
+                $availability->afternoon_time = ($request->afternoon_time) ? serialize($request->afternoon_time) : '';
+                $availability->evening_time = ($request->evening_time) ? serialize($request->evening_time) : '';
+                $availability->status = $request->status;
                 $availability->save();
             }
         }

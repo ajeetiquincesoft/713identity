@@ -124,8 +124,8 @@
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
                                         <select name="status" class="form-control">
-                                            <option value="1">Active</option>
-                                            <option value="0">InActive</option>
+                                            <option value="1" {{($data->status==1)?'selected':''}}>Active</option>
+                                            <option value="0" {{($data->status==0)?'selected':''}}>InActive</option>
                                         </select>
 
                                         @error('status')<div class="text-danger">{{ $message }}*</div>@enderror

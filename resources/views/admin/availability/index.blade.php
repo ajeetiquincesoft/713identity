@@ -37,6 +37,7 @@
                                 <th scope="col">Morning Slot</th>
                                 <th scope="col">AfterNoon Slot</th>
                                 <th scope="col">Evening Slot</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -49,6 +50,7 @@
                             <td>{{ (unserialize($datas->morning_time))?implode(',',unserialize($datas->morning_time)):'' }}</td>
                             <td>{{ (unserialize($datas->afternoon_time))?implode(',',unserialize($datas->afternoon_time)):'' }}</td>
                             <td>{{ (unserialize($datas->evening_time))?implode(',',unserialize($datas->evening_time)):'' }}</td>
+                            <td>{{($datas->status==1)?'Active':'InActive' }}</td>
 
                             <td>
                                 <a href="{{ route('availability.edit', $datas->id) }}" class="text-white">
