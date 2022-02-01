@@ -266,15 +266,29 @@ class ApiController extends Controller
     public function getAvailability(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'token' => 'required'
+            'token' => 'required',
+            'day' => 'required',
+            'date' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()], 200);
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $availability = Availability::where('status', 1)->get();
-            return response()->json(['success' => true, 'message' => 'Category treatments', 'availability' => $availability]);
+            $data = Availability::where('status', 1)->where('days', $request->day)->first(); 
+            $morning_slot = ($data->morning_time) ? unserialize($data->morning_time) : [];
+            foreach($morning_slot as $slot){
+                $morning[]=array('time'=>$slot);
+            }
+            $afternoon_slot = ($data->afternoon_time) ? unserialize($data->afternoon_time) : [];
+            foreach($afternoon_slot as $slot){
+                $afternoon[]=array('time'=>$slot);
+            }
+            $evening_slot = ($data->evening_time) ? unserialize($data->evening_time) :[];
+            foreach($evening_slot as $slot){
+                $evening[]=array('time'=>$slot);
+            }
+            return response()->json(['success' => true, 'message' => 'Availability','day'=>$data->days, 'morning_slot' => $morning,'afternoon_slot'=>$afternoon,'evening_slot'=>$evening]);
         } else {
             return response()->json([
                 'success' => false,

@@ -12,6 +12,8 @@ class Treatment extends Model
        
     ];
 
+    protected $appends=['totalprice'];
+
     public  function treatmentOption(){
         return $this->hasMany(TreatmentOption::class,'treatment_id','id');
     }
@@ -23,5 +25,10 @@ class Treatment extends Model
     public function category(){
         
         return $this->belongsTo(Category::class,'category_id');
+    }
+
+    public function getTotalPriceAttribute(){
+        $total_price_of_packages=$this->treatmentOptionPackage->sum('price');
+        return $total_price_of_packages;
     }
 }
