@@ -111,7 +111,9 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Image</label>
-                                       <input type="file" name="image">
+										
+											<input type="file" name="image">
+										
                                         @error('image')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
@@ -120,95 +122,120 @@
 							<!-- treatment option form start--->
 							
 							<div class="row">
-								<div class="col-lg-9"></div>
-								<div class="col-lg-3">
-									<div class="addtreamentoption btn-dark">Add Treatment Option</div>
-								</div>
-							</div>
-							
-							<div class="treatmentoption">
-								<div class="row">
-								 <div class="card-header">
-									<div class="row align-items-center">
-										<div class="col-12">
-											<h3 class="mb-0">Treatment Option</h3>
-										</div>
+							 <div class="card-header">
+								<div class="row align-items-center">
+									<div class="col-12">
+										<h3 class="mb-0">Treatment Package</h3>
 									</div>
-								  </div>
 								</div>
+							  </div>
+							</div>
+						<div class="addnewtreatmentpackage">
+						<div class="row">
+						<div class="col-lg-11">
+						<div class="treatmentoption">
+							<div class="treatmentpkg">
 								<div class="row">
-									<div class="col-lg-12">
+									<div class="col-lg-4">
 										<div class="form-group">
 											<label class="form-control-label">Title</label>
 											<input type="text" name="treamenttitle" class="form-control" value="{{ old('treamenttitle') }}">
 											@error('treamenttitle')<div class="text-danger">{{ $message }}*</div>@enderror
 										</div>
 									</div>
-									</div>
-									<div class="row">
-									<div class="col-lg-12">
+									<div class="col-lg-4">
 										<div class="form-group">
-											<label class="form-control-label">Image</label>
-											<input type="file" name="timage">
+								<label class="form-control-label" style="width:100%;margin-bottom:18px;">Image</label>
+											
+												
+												<input type="file" name="timage">
+										
 											@error('timage')<div class="text-danger">{{ $message }}*</div>@enderror
 										</div>
 									</div>
-								</div>
-								<div class="row">
-								 <div class="card-header">
-									<div class="row align-items-center">
-										<div class="col-12">
-											<h3 class="mb-0">Package</h3>
-										</div>
-									</div>
-								  </div>
-								</div>
-								<div class="row">
-									<div class="col-lg-12">
-										<div class="form-group">
-											<label class="form-control-label">Title</label>
-											<input type="text" name="packagename" class="form-control" value="{{ old('packagename') }}">
-											@error('packagename')<div class="text-danger">{{ $message }}*</div>@enderror
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-12">
-										<div class="form-group">
-											<label class="form-control-label">Package Type</label>
-											 <select name="packagetype" class="form-control">
-													<option value="">Select Package Type</option>
-													<option value="front">Front</option>
-													<option value="back">Back</option>
-											 </select>
-
-                                        @error('status')<div class="text-danger">{{ $message }}*</div>@enderror
-										</div>
-									</div>
-								</div>
-								<div class="row">
 									<div class="col-lg-4">
 										<div class="form-group">
-											<label class="form-control-label">Sub Package</label>
-											 <input type="text" name="subpackage" class="form-control" value="{{ old('subpackage') }}">
+											<label class="form-control-label">Status</label>
+											<select name="status" class="form-control">
+												<option value="1">Active</option>
+												<option value="0">InActive</option>
+											</select>
+
+											@error('status')<div class="text-danger">{{ $message }}*</div>@enderror
 										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label class="form-control-label">Price</label>
-											 <input type="text" name="price" class="form-control" value="{{ old('price') }}">
-										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="form-group">
-											<label class="form-control-label">Unit<small>(hint: max-13 and min-10)</small></label>
-											 <input type="text" name="subpackage" class="form-control" value="{{ old('subpackage') }}">
-										</div>
-									</div>
-									<div class="col-lg-2">
-										<a href="javascript:void(0);" class="add_button" title="Add field"><img src="add-icon.png"/></a>
 									</div>
 								</div>
+								<div class="package">
+								<div class="row">
+								 <div class="col-lg-10">
+								 <div class="subpackages">
+										<div class="row">
+											<div class="col-lg-4" id="packagetype">
+												<div class="form-group">
+													<label class="form-control-label">Package Type</label>
+													 <select name="packagetype" class="form-control">
+															<option value="">Select Package Type</option>
+															<option value="front">Front</option>
+															<option value="back">Back</option>
+													 </select>
+												@error('status')<div class="text-danger">{{ $message }}*</div>@enderror
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group" id="subpackagetype">
+													<label class="form-control-label">Subpackage</label>
+													<select name="subpackagetype" class="form-control" >
+														<option value="">Select Subpackage</option>
+															<option value="pf1">f1</option>
+															<option value="pf2">f2</option>	
+													 </select>
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="form-control-label">Title</label>
+													<input type="text" name="psubtitle" class="form-control" value="{{ old('psubtitle') }}">
+													@error('psubtitle')<div class="text-danger">{{ $message }}*</div>@enderror
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="form-control-label">Price</label>
+													<input type="text" name="psubtitle" class="form-control" value="{{ old('psubtitle') }}">
+													@error('psubtitle')<div class="text-danger">{{ $message }}*</div>@enderror
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="form-control-label">Max unit</label>
+													<input type="text" name="psubtitle" class="form-control" value="{{ old('psubtitle') }}">
+													@error('psubtitle')<div class="text-danger">{{ $message }}*</div>@enderror
+												</div>
+											</div>
+											<div class="col-lg-4">
+												<div class="form-group">
+													<label class="form-control-label">Min Unit</label>
+													<input type="text" name="psubtitle" class="form-control" value="{{ old('psubtitle') }}">
+													@error('psubtitle')<div class="text-danger">{{ $message }}*</div>@enderror
+												</div>
+											</div>
+										</div>
+									</div>
+								   </div>
+									<div class="col-lg-2">
+										<a href="javascript:void(0);" class="add_button" title="Add field"><img src="/713identity/public/admin_assets/img/add-icon.png"/></a>
+									</div>
+								</div>
+								</div>
+							</div>
+							</div>
+							</div>
+							<div class="col-lg-1">
+								<a href="javascript:void(0);" class="add_button_new" title="Add field"><img src="/713identity/public/admin_assets/img/add-icon.png"/></a>
+							</div>
+							</div>
 							</div>
 							<!--------end of treatmentoption ------->
                             <div class="row">
@@ -227,11 +254,76 @@
 </div>
 @endsection
 @section('scripts')
-<script>
-jQuery(document).ready(function(){
-  jQuery(".addtreamentoption").click(function(){
-    alert("The paragraph was clicked.");
-  });
+<script type="text/javascript">
+<!---------add new pakage---------->
+$(document).ready(function(){
+    var maxField = 10; 
+    var addButton = $('.add_button_new'); 
+    var newpackage = $('.addnewtreatmentpackage'); 
+    var x = 1; 
+    $(addButton).click(function(){
+        if(x < maxField){ 
+            x++; 
+				$(newpackage).append('<div class="newtpackage"><div class="row"><div class="card-header"><div class="row align-items-center"><div class="col-12"><h3 class="mb-0">Treatment Package</h3></div></div></div></div><div class="treat1"><div class="row"><div class="col-lg-11"><div class="treatmentoption"><div class="treatmentpkg"><div class="row"><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Title</label><input type="text" name="treamenttitle" class="form-control" value=""></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label" style="width:100%;margin-bottom:18px;">Image</label><input type="file" name="timage"></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Status</label><select name="status" class="form-control"><option value="1">Active</option><option value="0">InActive</option></select></div></div></div><div class="package"><div class="row"><div class="col-lg-10"><div class="subpackages"><div class="row"><div class="col-lg-4" id="tpack"><div class="form-group"><label class="form-control-label">Package Type</label><select name="packagetype" class="form-control"><option value="">Select Package Type</option><option value="front">Front</option><option value="back">Back</option></select></div></div><div class="col-lg-4"><div class="form-group" id="tsubpackagetype"><label class="form-control-label">Subpackage</label><select name="subpackagetype" class="form-control"><option value="">Select Subpackage</option><option value="pf1">f1</option><option value="pf2">f2</option></select></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Title</label><input type="text" name="psubtitle" class="form-control" value=""></div></div></div><div class="row"><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Price</label><input type="text" name="psubtitle" class="form-control" value=""></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Max unit</label><input type="text" name="psubtitle" class="form-control" value=""></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Min Unit</label><input type="text" name="psubtitle" class="form-control" value=""></div></div></div></div></div><div class="col-lg-2"><a href="javascript:void(0);" class="add_button" title="Add field"><img src="/713identity/public/admin_assets/img/add-icon.png"/></a></div></div></div></div></div></div><div class="col-lg-1"><a href="javascript:void(0);" class="ntpremove_button"><img src="/713identity/public/admin_assets/img/remove-icon.png"/></a></div></div></div></div><script>$("#tpack select").on("change", function(){var val= this.value; if(val==\'front\'){$("#tsubpackagetype").replaceWith("<div class=\'form-group\' id=\'subpackagetype\'><label class=\'form-control-label\'>Subpackage </label><select name=\'subpackagetype\' class=\'form-control\' ><option value=\'\'>Select Subpackage</option><option value=\'pf1\'>f1</option><option value=\'pf2\'>f2</option><option value=\'pf3\'>f3</option><option value=\'pf4\'>f4</option><option value=\'pf5\'>f5</option><option value=\'pf6\'>f6</option><option value=\'pf7\'>f7</option><option value=\'pf8\'>f8</option><option value=\'pf9\'>f9</option><option value=\'pf10\'>f10</option></select></div>"); }if(val==\'back\'){ $("#tsubpackagetype").replaceWith("<div class=\'form-group\' id=\'subpackagetype\'><label class=\'form-control-label\'>Subpackage</label><select name=\'subpackagetype\' class=\'form-control\' ><option value=\'\'>Select Subpackage</option><option value=\'pb1\'>b1</option><option value=\'pb2\'>b2</option><option value=\'pb3\'>b3</option><option value=\'pb4\'>b4</option><option value=\'pb5\'>b5</option><option value=\'pb6\'>b6</option><option value=\'pb7\'>b7</option><option value=\'pb8\'>b8</option><option value=\'pb9\'>b9</option><option value=\'pb10\'>b10</option></select></div>"); }});<\/script>');
+		
+        }
+    });
+    $(newpackage).on('click', '.ntpremove_button', function(e){
+        e.preventDefault();
+		$(this).closest(".newtpackage").fadeOut(1000, function(){
+			$(this).closest(".newtpackage").remove();
+		});
+        x--;
+    });
 });
+/* $('#tpack select').on('change', function()
+{
+   var val= this.value;
+	if(val=='front'){
+		$("#tsubpackagetype").replaceWith('<div class="form-group" id="tsubpackagetype"><label class="form-control-label">Subpackage</label><select name="subpackagetype" class="form-control" ><option value="">Select Subpackage</option><option value="pf1">f1</option><option value="pf2">f2</option><option value="pf3">f3</option><option value="pf4">f4</option><option value="pf5">f5</option><option value="pf6">f6</option><option value="pf7">f7</option><option value="pf8">f8</option><option value="pf9">f9</option><option value="pf10">f10</option></select></div>');
+	}
+	if(val=='back'){
+		$("#tsubpackagetype").replaceWith('<div class="form-group" id="tsubpackagetype"><label class="form-control-label">Subpackage</label><select name="subpackagetype" class="form-control" ><option value="">Select Subpackage</option><option value="pb1">b1</option><option value="pb2">b2</option><option value="pb3">b3</option><option value="pb4">b4</option><option value="pb5">b5</option><option value="pb6">b6</option><option value="pb7">b7</option><option value="pb8">b8</option><option value="pb9">b9</option><option value="pb10">b10</option></select></div>');
+	}
+}); */
+<!---------add new pakage---------->
+
+
+
+
+$(document).ready(function(){
+    var maxField = 10; 
+    var addButton = $('.add_button'); 
+    var wrapper = $('.package'); 
+    var x = 1; 
+    $(addButton).click(function(){
+        if(x < maxField){ 
+            x++; 
+				$(wrapper).append('<div class="delete_row"><div class="row"><div class="col-lg-10"><div class="subpackages"><div class="row"><div class="col-lg-4" id="packagetype'+ x +'"><div class="form-group"><label class="form-control-label">Package Type '+ x +'</label><select name="packagetype" class="form-control"><option value="">Select Package Type</option><option value="front">Front</option><option value="back">Back</option></select></div></div><div class="col-lg-4"><div class="form-group" id="subpackagetype'+ x +'"><label class="form-control-label">Subpackage '+ x +'</label><select name="subpackagetype" class="form-control" ><option value="">Select Subpackage</option><option value="pf1">f1</option><option value="pf2">f2</option></select></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Title</label><input type="text" name="psubtitle" class="form-control" value=""></div></div></div><div class="row"><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Price</label><input type="text" name="psubtitle" class="form-control" value=""></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Max unit</label><input type="text" name="psubtitle" class="form-control" value=""></div></div><div class="col-lg-4"><div class="form-group"><label class="form-control-label">Min Unit</label><input type="text" name="psubtitle" class="form-control" value=""></div></div></div></div></div><div class="col-lg-2"><a href="javascript:void(0);" class="remove_button"><img src="/713identity/public/admin_assets/img/remove-icon.png"/></a></div></div></div><script>$("#packagetype'+ x +' select").on("change", function(){var val= this.value; if(val==\'front\'){$("#subpackagetype'+ x +'").replaceWith("<div class=\'form-group\' id=\'subpackagetype'+ x +'\'><label class=\'form-control-label\'>Subpackage '+ x +'</label><select name=\'subpackagetype\' class=\'form-control\' ><option value=\'\'>Select Subpackage</option><option value=\'pf1\'>f1</option><option value=\'pf2\'>f2</option><option value=\'pf3\'>f3</option><option value=\'pf4\'>f4</option><option value=\'pf5\'>f5</option><option value=\'pf6\'>f6</option><option value=\'pf7\'>f7</option><option value=\'pf8\'>f8</option><option value=\'pf9\'>f9</option><option value=\'pf10\'>f10</option></select></div>"); }if(val==\'back\'){ $("#subpackagetype'+ x +'").replaceWith("<div class=\'form-group\' id=\'subpackagetype'+ x +'\'><label class=\'form-control-label\'>Subpackage '+ x +'</label><select name=\'subpackagetype\' class=\'form-control\' ><option value=\'\'>Select Subpackage</option><option value=\'pb1\'>b1</option><option value=\'pb2\'>b2</option><option value=\'pb3\'>b3</option><option value=\'pb4\'>b4</option><option value=\'pb5\'>b5</option><option value=\'pb6\'>b6</option><option value=\'pb7\'>b7</option><option value=\'pb8\'>b8</option><option value=\'pb9\'>b9</option><option value=\'pb10\'>b10</option></select></div>"); }});<\/script>');
+		
+        }
+    });
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+		$(this).closest(".delete_row").fadeOut(1000, function(){
+			$(this).closest(".delete_row").remove();
+		});
+        x--;
+    });
+});
+
+$('#packagetype select').on('change', function()
+{
+    var val= this.value;
+	if(val=='front'){
+		$("#subpackagetype").replaceWith('<div class="form-group" id="subpackagetype"><label class="form-control-label">Subpackage</label><select name="subpackagetype" class="form-control" ><option value="">Select Subpackage</option><option value="pf1">f1</option><option value="pf2">f2</option><option value="pf3">f3</option><option value="pf4">f4</option><option value="pf5">f5</option><option value="pf6">f6</option><option value="pf7">f7</option><option value="pf8">f8</option><option value="pf9">f9</option><option value="pf10">f10</option></select></div>');
+	}
+	if(val=='back'){
+		$("#subpackagetype").replaceWith('<div class="form-group" id="subpackagetype"><label class="form-control-label">Subpackage</label><select name="subpackagetype" class="form-control" ><option value="">Select Subpackage</option><option value="pb1">b1</option><option value="pb2">b2</option><option value="pb3">b3</option><option value="pb4">b4</option><option value="pb5">b5</option><option value="pb6">b6</option><option value="pb7">b7</option><option value="pb8">b8</option><option value="pb9">b9</option><option value="pb10">b10</option></select></div>');
+	}
+});
+
 </script>
+
+
 @stop
