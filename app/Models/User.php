@@ -75,4 +75,6 @@ class User extends Authenticatable
         // for instance, it might look like this in Laravel
         return User::whereOtp($number)->exists();
         }
+
+       
 }

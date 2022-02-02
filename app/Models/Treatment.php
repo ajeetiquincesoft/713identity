@@ -27,6 +27,11 @@ class Treatment extends Model
         return $this->belongsTo(Category::class,'category_id');
     }
 
+    public function wishlist(){
+        
+        return $this->belongsTo(Wishlist::class,'treatment_id');
+    }
+
     public function getTotalPriceAttribute(){
         $total_price_of_packages=$this->treatmentOptionPackage->sum('price');
         return $total_price_of_packages;

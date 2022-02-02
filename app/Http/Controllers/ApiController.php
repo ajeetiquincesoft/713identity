@@ -254,7 +254,7 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             $category = Category::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage'])->where('status', 1)->get();
-            return response()->json(['success' => true, 'message' => 'Category treatments', 'category' => $category]);
+            return response()->json(['success' => true, 'message' => 'Category treatments', 'category' => $category,'wishlist'=>$user->wishlist()->get()]);
         } else {
             return response()->json([
                 'success' => false,
@@ -275,20 +275,70 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $data = Availability::where('status', 1)->where('days', $request->day)->first(); 
+            $data = Availability::where('status', 1)->where('days', $request->day)->first();
             $morning_slot = ($data->morning_time) ? unserialize($data->morning_time) : [];
-            foreach($morning_slot as $slot){
-                $morning[]=array('time'=>$slot);
+            foreach ($morning_slot as $slot) {
+                $morning[] = array('time' => $slot);
             }
             $afternoon_slot = ($data->afternoon_time) ? unserialize($data->afternoon_time) : [];
-            foreach($afternoon_slot as $slot){
-                $afternoon[]=array('time'=>$slot);
+            foreach ($afternoon_slot as $slot) {
+                $afternoon[] = array('time' => $slot);
             }
-            $evening_slot = ($data->evening_time) ? unserialize($data->evening_time) :[];
-            foreach($evening_slot as $slot){
-                $evening[]=array('time'=>$slot);
+            $evening_slot = ($data->evening_time) ? unserialize($data->evening_time) : [];
+            foreach ($evening_slot as $slot) {
+                $evening[] = array('time' => $slot);
             }
-            return response()->json(['success' => true, 'message' => 'Availability','day'=>$data->days, 'morning_slot' => $morning,'afternoon_slot'=>$afternoon,'evening_slot'=>$evening]);
+            return response()->json(['success' => true, 'message' => 'Availability', 'day' => $data->days, 'morning_slot' => $morning, 'afternoon_slot' => $afternoon, 'evening_slot' => $evening]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+    public function getWishlist(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $wishlists = $user->wishlist()->with(['treatment','treatment.treatmentoption','user'])->get();
+            return response()->json(['success' => true, 'message' => 'wishlist','wishlists' => $wishlists]);
+     
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+    public function addWishlist(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'treatment_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $wishlists = $user->wishlist()->where('treatment_id',$request->treatment_id)->first();
+            if($wishlists){
+                $wishlists->delete();
+                return response()->json(['success' => true, 'message' => 'Removed from wishlist']);
+     
+            }else{
+                $wishlists = $user->wishlist()->make();
+                $wishlists->treatment_id=$request->treatment_id;
+                $wishlists->save();
+                return response()->json(['success' => true, 'message' => 'Added to wishlist']);
+            }
+            
         } else {
             return response()->json([
                 'success' => false,

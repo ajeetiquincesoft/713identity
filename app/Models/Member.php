@@ -44,4 +44,11 @@ class Member extends Model implements JWTSubject, Authenticatable
     public function getRememberTokenName () {
         // TODO: Implement getRememberTokenName() method.
     }
+
+    public function wishlist(){
+        return $this->hasMany(Wishlist::class,'user_id','id');
+    }
+    public  function treatment(){
+        return $this->hasMany(Treatment::class,'treatment_id','id');
+    }
 }
