@@ -13,6 +13,12 @@ use Illuminate\Contracts\Auth\Authenticatable;
 class Member extends Model implements JWTSubject, Authenticatable
 {
 	protected $table = 'users';
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'otp',
+        'otp_expire'
+    ];
    public function getJWTIdentifier () {
         return $this->getKey();
     }

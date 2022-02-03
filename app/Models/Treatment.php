@@ -12,7 +12,7 @@ class Treatment extends Model
        
     ];
 
-    protected $appends=['totalprice'];
+    protected $appends=['totalprice','wishlist'];
 
     public  function treatmentOption(){
         return $this->hasMany(TreatmentOption::class,'treatment_id','id');
@@ -27,13 +27,20 @@ class Treatment extends Model
         return $this->belongsTo(Category::class,'category_id');
     }
 
-    public function wishlist(){
-        
-        return $this->belongsTo(Wishlist::class,'treatment_id');
-    }
+ 
 
     public function getTotalPriceAttribute(){
         $total_price_of_packages=$this->treatmentOptionPackage->sum('price');
         return $total_price_of_packages;
+    }
+    public function getWishlistAttribute(){
+        $user = auth('api')->authenticate();
+
+        $whishlist = Wishlist::whereUserId($user->id)->whereTreatmentId($this->id)->first();
+        
+        if($whishlist)
+        return true;
+
+        return false;
     }
 }
