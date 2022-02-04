@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Availability;
 use App\Models\Category;
+use App\Models\Coupon;
 use App\Models\Treatment;
 use App\Models\User;
 use Carbon\Carbon;
@@ -254,7 +255,7 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             $category = Category::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage'])->where('status', 1)->get();
-            return response()->json(['success' => true, 'message' => 'Category treatments', 'category' => $category,'wishlist'=>$user->wishlist()->get()]);
+            return response()->json(['success' => true, 'message' => 'Category treatments', 'category' => $category, 'wishlist' => $user->wishlist()->get()]);
         } else {
             return response()->json([
                 'success' => false,
@@ -306,9 +307,8 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $wishlists = $user->wishlist()->with(['treatment','treatment.treatmentoption','user'])->get();
-            return response()->json(['success' => true, 'message' => 'wishlist','wishlists' => $wishlists]);
-     
+            $wishlists = $user->wishlist()->with(['treatment', 'treatment.treatmentoption', 'user'])->get();
+            return response()->json(['success' => true, 'message' => 'wishlist', 'wishlists' => $wishlists]);
         } else {
             return response()->json([
                 'success' => false,
@@ -327,18 +327,71 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $wishlists = $user->wishlist()->where('treatment_id',$request->treatment_id)->first();
-            if($wishlists){
+            $wishlists = $user->wishlist()->where('treatment_id', $request->treatment_id)->first();
+            if ($wishlists) {
                 $wishlists->delete();
                 return response()->json(['success' => true, 'message' => 'Removed from wishlist']);
-     
-            }else{
+            } else {
                 $wishlists = $user->wishlist()->make();
-                $wishlists->treatment_id=$request->treatment_id;
+                $wishlists->treatment_id = $request->treatment_id;
                 $wishlists->save();
                 return response()->json(['success' => true, 'message' => 'Added to wishlist']);
             }
-            
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function couponVerify(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'treatment_id' => 'required',
+            'code' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $coupon = Coupon::whereCode($request->code)->whereStatus(1)->first();
+            if ($coupon) {
+                if ($coupon->coupon_for == 'specific') {
+                    if ($coupon->treatment_id == $request->treatment_id) {
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Coupon code is valid.',
+                            'validate' => true,
+                            'coupon' => $coupon
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Invalid coupon code.',
+                            'validate' => false,
+                            'coupon' =>array()
+                        ]);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Coupon code is valid.',
+                        'validate' => true,
+                        'coupon' => $coupon
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid coupon code.',
+                    'validate' => false,
+                    'coupon' => array()
+                ]);
+            }
+           
         } else {
             return response()->json([
                 'success' => false,
