@@ -38,4 +38,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::delete('delete_availability/{id}', 'UserController@DeleteAvailability')->name('availability.destroy');
     Route::get('edit_availability/{id}', 'UserController@editAvailability')->name('availability.edit');
     Route::resource('unavailability', 'UnavailabilityController');
+    Route::resource('coupons', 'CouponController');
 });

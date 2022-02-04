@@ -135,6 +135,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{route('coupons.index')}}">
+                                <i class="fas fa-percent"></i>
+                                <span class="nav-link-text">Coupons</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('page.index') }}">
                                 <i class="fas fa-pager"></i>
                                 <span class="nav-link-text">Static Pages</span>
