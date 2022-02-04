@@ -50,7 +50,7 @@
                             <td>{{ $datas->code }}</td>                            
                             <td>{{ $datas->coupon_for }}</td>
                             <td>{{ $datas->discount }}</td>
-                            <td>{{ $datas->treatment_id }}</td>
+                            <td>{{@$datas->treatment->title}}</td>
                             <td>{{($datas->status==1)?'Active':'InActive' }}</td>
 
                             <td>

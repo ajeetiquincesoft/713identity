@@ -10,4 +10,8 @@ class Coupon extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function treatment(){
+        return $this->belongsTo(Treatment::class,'treatment_id');
+    }
+
 }

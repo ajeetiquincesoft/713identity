@@ -39,7 +39,7 @@
                         </ul>
                     </div>
                     @endif
-                    <form method="post" action="{{ route('postcreatavailability') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('coupons.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="pl-lg-4">
                         <div class="row">
