@@ -452,7 +452,7 @@ class ApiController extends Controller
                 $appointment->discount_applied = $request->discount_applied;
                 $appointment->discount_coupon_code = $request->discount_coupon_code;
                 $appointment->payment_id = $payment_id;
-                $appointment->save();
+                $appointment->save(); 
 
                 return response()->json([
                     'success' => true,
