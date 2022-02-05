@@ -9,4 +9,8 @@ class Appointment extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public  function appointmentPackages(){
+        return $this->hasMany(AppointmentPackages::class,'appointment_id','id');
+    }
 }

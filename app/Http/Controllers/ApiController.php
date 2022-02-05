@@ -8,6 +8,8 @@ use App\Models\Coupon;
 use App\Models\Treatment;
 use App\Models\User;
 use App\Models\Payment;
+use App\Models\Appointment;
+use App\Models\AppointmentPackages;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -436,10 +438,32 @@ class ApiController extends Controller
             $customerpay->amount = $pay->amount / 100;
             $customerpay->transaction_id = $pay->balance_transaction;
             $customerpay->status = $pay->paid;
-            $customerpay->payment_for = $request->payment_for;
-            $customerpay->payee_id = $request->coach_id;
             $customerpay->payment_date = date('Y-m-d H:i:s', $pay->created);
             $customerpay->save();
+            $payment_id = $customerpay->id;
+            if ($pay->balance_transaction) {
+                $appointment = Appointment::make();
+                $appointment->user_id = $user->id;
+                $appointment->treatment_id = $request->treatment_id;
+                $appointment->date = $request->date;
+                $appointment->time = $request->time;
+                $appointment->total = $request->total;
+                $appointment->discounted_total = $request->discounted_total;
+                $appointment->discount_applied = $request->discount_applied;
+                $appointment->discount_coupon_code = $request->discount_coupon_code;
+                $appointment->payment_id = $payment_id;
+                $appointment->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Your appointment has been schedule successfully.'
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your payment has been failed.Please try again or contact to admin.',
+                ]);
+            }
         } else {
             return response()->json([
                 'success' => false,

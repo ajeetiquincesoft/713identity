@@ -19,6 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->double('amount');
             $table->string('transaction_id')->nullable();
+            $table->dateTime('payment_date')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
         });
