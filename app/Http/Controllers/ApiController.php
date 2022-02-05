@@ -7,11 +7,13 @@ use App\Models\Category;
 use App\Models\Coupon;
 use App\Models\Treatment;
 use App\Models\User;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client;
 use JWTAuth;
+use Stripe;
 
 class ApiController extends Controller
 {
@@ -372,7 +374,7 @@ class ApiController extends Controller
                             'success' => false,
                             'message' => 'Invalid coupon code.',
                             'validate' => false,
-                            'coupon' =>array()
+                            'coupon' => array()
                         ]);
                     }
                 } else {
@@ -391,7 +393,53 @@ class ApiController extends Controller
                     'coupon' => array()
                 ]);
             }
-           
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function BookAppointment(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'treatment_id' => 'required',
+            'date' => 'required',
+            'time' => 'required',
+            'total' => 'required',
+            'discounted_total' => 'required',
+            'discount_applied' => 'required',
+            'discount_coupon_code' => 'required',
+            'treatmentoption_id' => 'required',
+            'treatmentoptionpackage_id' => 'required',
+            'stripe_token' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+
+            Stripe\Stripe::setApiKey(config('app.stripe_test') ? config('app.stripe_key') : config('app.stripe_key'));
+            $amount = ($request->discounted_total * 100);
+            $pay = Stripe\Charge::create([
+                "amount" => $amount,
+                "currency" => "USD",
+                "source" => $request->stripe_token,
+                "description" => "test",
+            ]);
+            $customerpay = Payment::make();
+            $customerpay->user_id = $user->id;
+            $customerpay->amount = $pay->amount / 100;
+            $customerpay->transaction_id = $pay->balance_transaction;
+            $customerpay->status = $pay->paid;
+            $customerpay->payment_for = $request->payment_for;
+            $customerpay->payee_id = $request->coach_id;
+            $customerpay->payment_date = date('Y-m-d H:i:s', $pay->created);
+            $customerpay->save();
         } else {
             return response()->json([
                 'success' => false,

@@ -17,8 +17,6 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->bigInteger('appointment_id')->unsigned();
-            $table->foreign('appointment_id')->references('id')->on('appointments');
             $table->double('amount');
             $table->string('transaction_id')->nullable();
             $table->integer('status')->default(1);

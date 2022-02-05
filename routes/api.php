@@ -28,4 +28,5 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('add-wishlist', [ApiController::class, 'addWishlist']);
     Route::get('get-wishlist', [ApiController::class, 'getWishlist']);
     Route::get('coupon-verify', [ApiController::class, 'couponVerify']);
+    Route::post('book-appointment', [ApiController::class, 'BookAppointment']);
 });

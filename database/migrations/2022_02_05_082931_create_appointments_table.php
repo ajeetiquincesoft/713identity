@@ -25,6 +25,8 @@ class CreateAppointmentsTable extends Migration
             $table->double('discounted_total')->nullable();
             $table->double('discount_applied')->nullable();
             $table->double('discount_coupon_code')->nullable();
+            $table->bigInteger('payment_id')->unsigned();
+            $table->foreign('payment_id')->references('id')->on('payments');
             $table->integer('status')->default(1);
             $table->timestamps();
         });
