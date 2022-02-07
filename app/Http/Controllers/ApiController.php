@@ -281,19 +281,23 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             $data = Availability::where('status', 1)->where('days', strtolower($request->day))->first();
-            $morning_slot = ($data->morning_time) ? unserialize($data->morning_time) : [];
-            foreach ($morning_slot as $slot) {
-                $morning[] = array('time' => $slot);
+            if ($data) {
+                $morning_slot = ($data->morning_time) ? unserialize($data->morning_time) : [];
+                foreach ($morning_slot as $slot) {
+                    $morning[] = array('time' => $slot);
+                }
+                $afternoon_slot = ($data->afternoon_time) ? unserialize($data->afternoon_time) : [];
+                foreach ($afternoon_slot as $slot) {
+                    $afternoon[] = array('time' => $slot);
+                }
+                $evening_slot = ($data->evening_time) ? unserialize($data->evening_time) : [];
+                foreach ($evening_slot as $slot) {
+                    $evening[] = array('time' => $slot);
+                }
+                return response()->json(['success' => true, 'message' => 'Availability', 'day' => $data->days, 'morning_slot' => $morning, 'afternoon_slot' => $afternoon, 'evening_slot' => $evening]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'No Availability']);
             }
-            $afternoon_slot = ($data->afternoon_time) ? unserialize($data->afternoon_time) : [];
-            foreach ($afternoon_slot as $slot) {
-                $afternoon[] = array('time' => $slot);
-            }
-            $evening_slot = ($data->evening_time) ? unserialize($data->evening_time) : [];
-            foreach ($evening_slot as $slot) {
-                $evening[] = array('time' => $slot);
-            }
-            return response()->json(['success' => true, 'message' => 'Availability', 'day' => $data->days, 'morning_slot' => $morning, 'afternoon_slot' => $afternoon, 'evening_slot' => $evening]);
         } else {
             return response()->json([
                 'success' => false,
@@ -452,7 +456,7 @@ class ApiController extends Controller
                 $appointment->discount_applied = $request->discount_applied;
                 $appointment->discount_coupon_code = $request->discount_coupon_code;
                 $appointment->payment_id = $payment_id;
-                $appointment->save(); 
+                $appointment->save();
 
                 return response()->json([
                     'success' => true,
