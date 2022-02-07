@@ -58,7 +58,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Answer</label>
-                                        <textarea id="summernote" name="answer" class="summernote form-control">{{$data->answer}}</textarea>
+                                        <textarea id="summernotes" name="answer" class="summernotes form-control">{{$data->answer}}</textarea>
 
                                         @error('answer')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
