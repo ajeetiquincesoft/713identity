@@ -280,7 +280,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $data = Availability::where('status', 1)->where('days', $request->day)->first();
+            $data = Availability::where('status', 1)->where('days', strtolower($request->day))->first();
             $morning_slot = ($data->morning_time) ? unserialize($data->morning_time) : [];
             foreach ($morning_slot as $slot) {
                 $morning[] = array('time' => $slot);
