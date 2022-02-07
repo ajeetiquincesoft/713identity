@@ -95,7 +95,7 @@ class QuestionAnswerController extends Controller
             'question' => 'required',
             'answer' => 'required',
             'status' => 'required'
-        ]);
+        ]); 
         try {
             DB::beginTransaction();
 
