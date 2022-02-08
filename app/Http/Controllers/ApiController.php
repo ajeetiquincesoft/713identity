@@ -429,8 +429,8 @@ class ApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => $request->all(),
-            'message2' => $request->packages[0][0],
-            'message3' => $request->packages[0][1],
+            'message2' => $request->packages[0],
+            'message3' => $request->packages[1],
         ]);
         if ($user) {
 
