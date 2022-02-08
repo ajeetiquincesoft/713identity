@@ -427,6 +427,10 @@ class ApiController extends Controller
             return response()->json(['error' => $validator->messages()], 200);
         }
         $user = auth('api')->authenticate($request->token);
+        return response()->json([
+            'success' => true,
+            'message' => $request->all(),
+        ]);
         if ($user) {
 
             Stripe\Stripe::setApiKey(config('app.stripe_test') ? config('app.stripe_key') : config('app.stripe_key'));
