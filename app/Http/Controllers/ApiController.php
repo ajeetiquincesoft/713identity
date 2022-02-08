@@ -419,7 +419,6 @@ class ApiController extends Controller
             'total' => 'required',
             'discounted_total' => 'required',
             'discount_applied' => 'required',
-            'discount_coupon_code' => 'required',
             'packages' => 'required',
             'stripe_token' => 'required',
         ]);
