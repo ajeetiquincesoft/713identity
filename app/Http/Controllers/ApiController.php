@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\Appointment;
 use App\Models\AppointmentPackages;
 use App\Models\QuestionAnswer;
+use App\Models\TreatmentOptionPackage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -426,12 +427,12 @@ class ApiController extends Controller
             return response()->json(['error' => $validator->messages()], 200);
         }
         $user = auth('api')->authenticate($request->token);
-        return response()->json([
-            'success' => true,
-            'message' => $request->all(),
-            'message2' => $request->packages[0],
-            'message3' => $request->packages[1],
-        ]);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => $request->all(),
+        //     'message2' => $request->packages[0],
+        //     'message3' => $request->packages[1],
+        // ]);
         if ($user) {
 
             Stripe\Stripe::setApiKey(config('app.stripe_test') ? config('app.stripe_key') : config('app.stripe_key'));
@@ -462,6 +463,15 @@ class ApiController extends Controller
                 $appointment->discount_coupon_code = $request->discount_coupon_code;
                 $appointment->payment_id = $payment_id;
                 $appointment->save();
+                $appointment_id = $appointment->id;
+                foreach ($request->packages as $package) {
+                    $package_data = TreatmentOptionPackage::find($package);
+                    $optiion_id = $package_data->treatmentoption_id;
+                    $appointent_packages = $appointment->appointmentPackages()->make();
+                    $appointent_packages->treatmentoption_id = $optiion_id;
+                    $appointent_packages->treatmentoptionpackage_id = $package;
+                    $appointent_packages->save();
+                }
 
                 return response()->json([
                     'success' => true,
@@ -491,9 +501,8 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $questionanswers=QuestionAnswer::whereStatus(1)->get();
+            $questionanswers = QuestionAnswer::whereStatus(1)->get();
             return response()->json(['success' => true, 'message' => 'question answer', 'questionanswers' => $questionanswers]);
-  
         } else {
             return response()->json([
                 'success' => false,
