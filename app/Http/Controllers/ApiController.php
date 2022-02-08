@@ -420,8 +420,7 @@ class ApiController extends Controller
             'discounted_total' => 'required',
             'discount_applied' => 'required',
             'discount_coupon_code' => 'required',
-            'treatmentoption_id' => 'required',
-            'treatmentoptionpackage_id' => 'required',
+            'packages' => 'required',
             'stripe_token' => 'required',
         ]);
         if ($validator->fails()) {
