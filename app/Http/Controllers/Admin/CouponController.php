@@ -78,7 +78,7 @@ class CouponController extends Controller
             if ($request->coupon_for == 'specific') {
                 $data->treatment_id   = $request->treatment;
             } else {
-                $data->treatment_id   = '';
+                $data->treatment_id   = 0;
             }
             $data->code   = $request->code;
             $data->discount = $request->discount;
