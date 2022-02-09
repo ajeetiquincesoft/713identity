@@ -19,7 +19,7 @@ class CreateAppointmentsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->bigInteger('treatment_id')->unsigned();
             $table->foreign('treatment_id')->references('id')->on('treatments');
-            $table->dateTime('date');
+            $table->string('date');
             $table->string('time');
             $table->double('total');
             $table->double('discounted_total')->nullable();

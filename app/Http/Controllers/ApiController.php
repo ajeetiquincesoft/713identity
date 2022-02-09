@@ -455,7 +455,7 @@ class ApiController extends Controller
                 $appointment = Appointment::make();
                 $appointment->user_id = $user->id;
                 $appointment->treatment_id = $request->treatment_id;
-                $appointment->date =  date('Y-m-d', strtotime($request->date));
+                $appointment->date =  $request->date;
                 $appointment->time =  $request->time;
                 $appointment->total = $request->total;
                 $appointment->discounted_total = $request->discounted_total;
