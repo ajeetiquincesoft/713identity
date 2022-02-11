@@ -566,7 +566,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-           $contact=array('address'=>array('Full address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103,Houston,TX,7705,USA','address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103','city'=>'Houston','state'=>'TX','Zip'=>'7705','country'=>'USA'),'phone'=>'7133219876','lat'=>'29.794931','long'=>'-95.534074');
+           $contact=array('address'=>array('Full address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103,Houston,TX,7705,USA','address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103','city'=>'Houston','state'=>'TX','Zip'=>'7705','country'=>'USA'),'phone'=>'7133219876','lat'=>'29.794931','lng'=>'-95.534074');
             return response()->json(['success' => true, 'message' => 'Contect us', 'contact' => $contact]);
         } else {
             return response()->json([
