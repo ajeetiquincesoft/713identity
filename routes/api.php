@@ -31,4 +31,5 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('book-appointment', [ApiController::class, 'BookAppointment']);
     Route::get('get-appointment', [ApiController::class, 'GetAppointment']);
     Route::get('questionAnswer', [ApiController::class, 'QuestionAnswer']);
+    Route::get('get-pages', [ApiController::class, 'GetPages']);
 });

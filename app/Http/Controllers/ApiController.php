@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Appointment;
 use App\Models\AppointmentPackages;
+use App\Models\Page;
 use App\Models\QuestionAnswer;
 use App\Models\TreatmentOptionPackage;
 use Carbon\Carbon;
@@ -528,6 +529,24 @@ class ApiController extends Controller
         if ($user) {
             $questionanswers = QuestionAnswer::whereStatus(1)->get();
             return response()->json(['success' => true, 'message' => 'question answer', 'questionanswers' => $questionanswers]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+    public function GetPages(){
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $pages = Page::whereStatus(1)->get();
+            return response()->json(['success' => true, 'message' => 'all pages content', 'pages' => $pages]);
         } else {
             return response()->json([
                 'success' => false,
