@@ -502,7 +502,12 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $appointments = $user->appointments()->with('appointmentPackages','appointmentPayment','appointmentPackages.treatmentOptionPackage')->get();
+            if ($request->date and $request->date!='') {
+                $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            } else {
+
+                $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            }
             return response()->json(['success' => true, 'message' => 'question answer', 'appointments' => $appointments]);
         } else {
             return response()->json([
