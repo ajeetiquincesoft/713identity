@@ -13,4 +13,7 @@ class AppointmentPackages extends Model
         
         return $this->belongsTo(Appointment::class,'appointment_id');
     }
+    public  function treatmentOptionPackage(){
+        return $this->belongsTo(TreatmentOptionPackage::class,'treatmentoptionpackage_id');
+    }
 }
