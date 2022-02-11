@@ -503,8 +503,8 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            if ($request->date and $request->date!='') {
-                $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date','=',$request->date)->get();
+            if ($request->date and $request->date != '') {
+                $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
             } else {
 
                 $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
@@ -536,7 +536,8 @@ class ApiController extends Controller
             ]);
         }
     }
-    public function GetPages(Request $request){
+    public function GetPages(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'token' => 'required'
         ]);
@@ -547,6 +548,26 @@ class ApiController extends Controller
         if ($user) {
             $pages = Page::whereStatus('1')->get();
             return response()->json(['success' => true, 'message' => 'all pages content', 'pages' => $pages]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function GetInTouch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+           $contact=array('address'=>array('Full address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103,Houston,TX,7705,USA','address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103','city'=>'Houston','state'=>'TX','Zip'=>'7705','country'=>'USA'),'phone'=>'7133219876','lat'=>'29.794931','long'=>'-95.534074');
+            return response()->json(['success' => true, 'message' => 'all pages content', 'contact' => $contact]);
         } else {
             return response()->json([
                 'success' => false,
