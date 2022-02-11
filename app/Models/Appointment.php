@@ -15,7 +15,7 @@ class Appointment extends Model
         return $this->hasMany(AppointmentPackages::class, 'appointment_id', 'id');
     }
     public  function treatmentOptionPackage(){
-        return $this->hasMany(TreatmentOptionPackage::class,'treatmentoptionpackage_id','id');
+        return $this->belongsTo(TreatmentOptionPackage::class,'treatmentoptionpackage_id');
     }
     public function user()
     {
