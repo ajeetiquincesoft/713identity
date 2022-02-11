@@ -10,7 +10,12 @@ class Appointment extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public  function appointmentPackages(){
-        return $this->hasMany(AppointmentPackages::class,'appointment_id','id');
+    public  function appointmentPackages()
+    {
+        return $this->hasMany(AppointmentPackages::class, 'appointment_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

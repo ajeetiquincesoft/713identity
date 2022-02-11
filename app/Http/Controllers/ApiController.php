@@ -491,6 +491,26 @@ class ApiController extends Controller
         }
     }
 
+    public function GetAppointment(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $appointments = $user->appointments()->get();
+            return response()->json(['success' => true, 'message' => 'question answer', 'appointments' => $appointments]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
     public function QuestionAnswer(Request $request)
     {
         $validator = Validator::make($request->all(), [
