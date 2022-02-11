@@ -502,7 +502,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $appointments = $user->appointments()->get();
+            $appointments = $user->appointments()->with('appointmentPackages')->get();
             return response()->json(['success' => true, 'message' => 'question answer', 'appointments' => $appointments]);
         } else {
             return response()->json([
