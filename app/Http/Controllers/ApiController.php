@@ -545,7 +545,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $pages = Page::whereStatus('1')->get();
+            $pages = Page::whereStatus(1)->get();
             return response()->json(['success' => true, 'message' => 'all pages content', 'pages' => $pages]);
         } else {
             return response()->json([
