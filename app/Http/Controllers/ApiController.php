@@ -530,10 +530,10 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             if ($request->date and $request->date != '') {
-                $appointments = Appointment::with('user','treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
+                $appointments = Appointment::with('user', 'treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
             } else {
 
-                $appointments = Appointment::with('user','treatment' ,'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+                $appointments = Appointment::with('user', 'treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
             }
             return response()->json(['success' => true, 'message' => 'All appointments', 'appointments' => $appointments]);
         } else {
@@ -626,7 +626,8 @@ class ApiController extends Controller
         }
     }
 
-    public function GetCoupons(Request $request){
+    public function GetCoupons(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'token' => 'required'
         ]);
@@ -635,8 +636,137 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $coupons=Coupon::get();
+            $coupons = Coupon::get();
             return response()->json(['success' => true, 'message' => 'All Coupons', 'coupons' => $coupons]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+    public function AddCoupons(Request $request)
+    {
+
+        if ($request->coupon_for == 'specific') {
+            $validator = Validator::make($request->all(), [
+                'token' => 'required',
+                'title' => 'required',
+                'coupon_for' => 'required',
+                'code' => 'required|unique:coupons',
+                'discount' => 'required',
+                'treatment' => 'required',
+                'expiry_date' => 'required',
+                'status' => 'required'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'token' => 'required',
+                'title' => 'required',
+                'coupon_for' => 'required',
+                'code' => 'required|unique:coupons',
+                'discount' => 'required',
+                'expiry_date' => 'required',
+                'status' => 'required'
+            ]);
+        }
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $data = Coupon::make();
+            $data->title = $request->title;
+            $data->user_id = $user->id;
+            $data->coupon_for   = $request->coupon_for;
+            if ($request->coupon_for == 'specific') {
+                $data->treatment_id   = $request->treatment;
+            } else {
+                $data->treatment_id   = 0;
+            }
+            $data->code   = $request->code;
+            $data->discount = $request->discount;
+            $data->expiry_date = Carbon::createFromFormat('d-m-Y', $request->expiry_date)->format('Y-m-d');
+            $data->status = $request->status;
+            $data->save();
+            return response()->json(['success' => true, 'message' => 'Added Successfully']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function EditCoupons(Request $request)
+    {
+
+        if ($request->coupon_for == 'specific') {
+            $validator = Validator::make($request->all(), [
+                'token' => 'required',
+                'id' => 'required',
+                'title' => 'required',
+                'coupon_for' => 'required',
+                'code' => 'required|unique:coupons',
+                'discount' => 'required',
+                'treatment' => 'required',
+                'expiry_date' => 'required',
+                'status' => 'required'
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'token' => 'required',
+                'id' => 'required',
+                'title' => 'required',
+                'coupon_for' => 'required',
+                'code' => 'required|unique:coupons',
+                'discount' => 'required',
+                'expiry_date' => 'required',
+                'status' => 'required'
+            ]);
+        }
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $data = Coupon::find($request->id);
+            $data->title = $request->title;
+            $data->user_id = $user->id;
+            $data->coupon_for   = $request->coupon_for;
+            if ($request->coupon_for == 'specific') {
+                $data->treatment_id   = $request->treatment;
+            } else {
+                $data->treatment_id   = 0;
+            }
+            $data->code   = $request->code;
+            $data->discount = $request->discount;
+            $data->expiry_date = Carbon::createFromFormat('d-m-Y', $request->expiry_date)->format('Y-m-d');
+            $data->status = $request->status;
+            $data->save();
+            return response()->json(['success' => true, 'message' => 'Update Successfully']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function DeleteCoupons(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $data = Coupon::findOrFail($request->id);
+            $data->delete();
+            return response()->json(['success' => true, 'message' => 'Deleted Successfully']);
         } else {
             return response()->json([
                 'success' => false,
