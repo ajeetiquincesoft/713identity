@@ -535,8 +535,32 @@ class ApiController extends Controller
 
             //     $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
             // }
-            $appointments=Appointment::with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            $appointments = Appointment::with('user', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
             return response()->json(['success' => true, 'message' => 'All appointments', 'appointments' => $appointments]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function markAppointmentStatus(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'id' => 'required',
+            'status' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $appointment = Appointment::find($request->id);
+            $appointment->status = $request->status;
+            $appointment->save();
+            return response()->json(['success' => true, 'message' => 'Status Updated Successfully.']);
         } else {
             return response()->json([
                 'success' => false,
@@ -593,7 +617,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-           $contact=array('address'=>array('Full address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103,Houston,TX,7705,USA','address'=>'Okaterion,PLLC 1383 Bunker Hill RD #103','city'=>'Houston','state'=>'TX','Zip'=>'7705','country'=>'USA'),'phone'=>'7133219876','lat'=>'29.794931','lng'=>'-95.534074');
+            $contact = array('address' => array('Full address' => 'Okaterion,PLLC 1383 Bunker Hill RD #103,Houston,TX,7705,USA', 'address' => 'Okaterion,PLLC 1383 Bunker Hill RD #103', 'city' => 'Houston', 'state' => 'TX', 'Zip' => '7705', 'country' => 'USA'), 'phone' => '7133219876', 'lat' => '29.794931', 'lng' => '-95.534074');
             return response()->json(['success' => true, 'message' => 'Contect us', 'contact' => $contact]);
         } else {
             return response()->json([
