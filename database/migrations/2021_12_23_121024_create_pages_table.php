@@ -20,7 +20,7 @@ class CreatePagesTable extends Migration
                 $table->string('slug')->nullable();
                 $table->string('meta_description')->nullable();
                 $table->string('meta_data')->nullable();
-                $table->text('page_content')->nullable();
+                $table->longText('page_content')->nullable();
                 $table->enum('status', ['0', '1'])->comment('0 for Inactive and 1 for active')->default('1');
                 $table->timestamps();
                 $table->softDeletes();

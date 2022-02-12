@@ -625,4 +625,23 @@ class ApiController extends Controller
             ]);
         }
     }
+
+    public function GetCoupons(Request $request){
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $coupons=Coupon::get();
+            return response()->json(['success' => true, 'message' => 'All Coupons', 'coupons' => $coupons]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
 }

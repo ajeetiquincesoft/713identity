@@ -33,6 +33,8 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('questionAnswer', [ApiController::class, 'QuestionAnswer']);
     Route::get('get-pages', [ApiController::class, 'GetPages']);
     Route::get('get-in-touch', [ApiController::class, 'GetInTouch']);
+    //Doctor Api Start
     Route::get('get-all-appointment', [ApiController::class, 'GetAllAppointment']);
     Route::get('mark-appointment-status', [ApiController::class, 'markAppointmentStatus']);
+    Route::get('coupons', [ApiController::class, 'GetCoupons']);
 });
