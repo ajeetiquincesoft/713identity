@@ -529,13 +529,12 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            // if ($request->date and $request->date != '') {
-            //     $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
-            // } else {
+            if ($request->date and $request->date != '') {
+                $appointments = Appointment::with('user','treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
+            } else {
 
-            //     $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
-            // }
-            $appointments = Appointment::with('user', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+                $appointments = Appointment::with('user','treatment' ,'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            }
             return response()->json(['success' => true, 'message' => 'All appointments', 'appointments' => $appointments]);
         } else {
             return response()->json([
