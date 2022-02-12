@@ -42,18 +42,12 @@ class TreatmentController extends Controller
     public function store(Request $request)
     {
 		
-		
-       
         $validatedData = $request->validate([
             'title' 				=> 'required',
             'category' 				=> 'required',
             'status' 				=> 'required',
-			/* 'option_title'			=> 'required'
-			'option_image'			=> 'required',
-			'option_status'			=> 'required',
-			'option_package_type'	=> 'required',
-			'option_subpackage'		=> 'required',
-			'option_package_title'	=> 'required' */
+			'image' 				=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+			
         ]);
 
         try {
@@ -66,10 +60,13 @@ class TreatmentController extends Controller
             if (!empty($slug) && $slug != null) {
                 $is_slug_exist = Treatment::where('slug', $slug)->first();
                 if ($is_slug_exist) {
-                    return redirect()->route('page.create')->with('Slug already exists.');
+                    return redirect()->route('treatment.create')->with('Slug already exists.');
                 }
             } 
-
+			
+			$TreatmentImage = time().'.'.$request->image->extension();  
+			$request->image->move(public_path('admin_assets\treatment_images'), $TreatmentImage);
+		
             $data = Treatment::make();
             $data->title = $request->title;
             $data->slug = $slug;
@@ -77,6 +74,7 @@ class TreatmentController extends Controller
             $data->short_description = $request->short_description;
             $data->description = $request->description;
             $data->status = $request->status;
+			$data->image = $TreatmentImage;
             $data->save();
 		
 					
@@ -84,10 +82,15 @@ class TreatmentController extends Controller
 				$boxcounter = $request->boxcounter;
 				for($i=1; $i<=$boxcounter; $i++){
 					$boxes = 'box'.$i;
+					$TreatmentoptionImage = time().'.'.$request->$boxes['option_image'][0]->extension(); 
+					$request->$boxes['option_image'][0]->move(public_path('admin_assets\treatment_images'), $TreatmentoptionImage);
+					
 					
 					$options=$data->treatmentOption()->make();
 					 $options->name=$request->$boxes['option_title'][0];
+					 $options->image=$TreatmentoptionImage;
 					 $options->status=$request->$boxes['option_status'][0];
+					 
 					 $options->save();
 					 $j=0;
 					  $treatment_id=$data->id;
@@ -112,7 +115,7 @@ class TreatmentController extends Controller
 			
 			
             DB::commit();
-            return redirect()->route('category.index')->withSuccess('created successfully');
+            return redirect()->route('treatment.index')->withSuccess('created successfully');
         } catch (\Exception $e) {
             DB::rollback();
             return back()->withErrors($e->getMessage())->withInput($request->all());
@@ -138,7 +141,13 @@ class TreatmentController extends Controller
      */
     public function edit($id)
     {
-        //
+		
+        $categories = Category::whereStatus(1)->get();
+		$treatments = Treatment::whereStatus(1)->where('id', '!=', $id)->get();
+		$data = Treatment::find($id);
+		$treatmentsoptions = TreatmentOption::whereTreatment_id($id)->where('status', '=', 1)->get();
+		$treatmentoptionspackage=TreatmentOptionPackage::whereTreatment_id($id)->get();
+		 return view('admin/treatment/edit', ['categories'=>$categories, 'data' => $data, 'treatment' => $treatments,'treatmentoptions'=>$treatmentsoptions,'treatmentsoptionspackage'=>$treatmentoptionspackage ]);
     }
 
     /**
@@ -150,7 +159,40 @@ class TreatmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+		//print_r($request->all());
+	//die;
+       $validatedData = $request->validate([
+            'title' => 'required',
+            'status' => 'required'
+        ]);
+        try{
+            DB::beginTransaction();
+			if($request->treatmentimagenew){
+			$TreatmentImage = time().'.'.$request->image->extension();  
+			$request->image->move(public_path('admin_assets\treatment_images'), $TreatmentImage);
+				//echo "hello";
+				unlink(public_path('admin_assets\treatment_images').$request->oldimage);
+				
+			}
+			
+            $data = Treatment::findOrFail($id);
+			$data->title = $request->title;
+            $data->category_id   = $request->category;
+            $data->short_description = $request->short_description;
+            $data->description = $request->description;
+            $data->image = $TreatmentImage;
+			$data->status = $request->status;
+            $data->update();
+
+
+            DB::commit();
+            return redirect()->route('treatment.index')->withSuccess('Updated successfully');
+
+        }catch (\Exception $e){
+            DB::rollback();
+            return back()->withErrors($e->getMessage())->withInput($request->all());
+        }
+	   
     }
 
     /**
@@ -161,6 +203,6 @@ class TreatmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+       
     }
 }
