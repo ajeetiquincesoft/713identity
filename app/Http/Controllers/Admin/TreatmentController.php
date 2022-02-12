@@ -143,11 +143,11 @@ class TreatmentController extends Controller
     {
 		
         $categories = Category::whereStatus(1)->get();
-		$treatments = Treatment::whereStatus(1)->where('id', '!=', $id)->get();
-		$data = Treatment::find($id);
-		$treatmentsoptions = TreatmentOption::whereTreatment_id($id)->where('status', '=', 1)->get();
-		$treatmentoptionspackage=TreatmentOptionPackage::whereTreatment_id($id)->get();
-		 return view('admin/treatment/edit', ['categories'=>$categories, 'data' => $data, 'treatment' => $treatments,'treatmentoptions'=>$treatmentsoptions,'treatmentsoptionspackage'=>$treatmentoptionspackage ]);
+		//dd($categories);
+		
+		$treatments = Treatment::with('TreatmentOption','TreatmentOption.treatmentOptionPackage','category')->find($id);
+		
+		 return view('admin/treatment/edit', ['categories'=>$categories, 'data' => $treatments]);
     }
 
     /**
@@ -159,30 +159,59 @@ class TreatmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-		//print_r($request->all());
-	//die;
+
        $validatedData = $request->validate([
-            'title' => 'required',
-            'status' => 'required'
+            'title' 				=> 'required',
+            'category' 				=> 'required',
+            'status' 				=> 'required',
+			
         ]);
         try{
             DB::beginTransaction();
-			if($request->treatmentimagenew){
-			$TreatmentImage = time().'.'.$request->image->extension();  
-			$request->image->move(public_path('admin_assets\treatment_images'), $TreatmentImage);
-				//echo "hello";
-				unlink(public_path('admin_assets\treatment_images').$request->oldimage);
-				
-			}
 			
             $data = Treatment::findOrFail($id);
 			$data->title = $request->title;
             $data->category_id   = $request->category;
             $data->short_description = $request->short_description;
             $data->description = $request->description;
-            $data->image = $TreatmentImage;
+			if($request->treatmentimagenew){
+				$TreatNewImage = time().'.'.$request->treatmentimagenew->extension();  
+				$request->treatmentimagenew->move(public_path('admin_assets\treatment_images'), $TreatNewImage);
+				$data->image = $TreatNewImage;
+			}
+			
 			$data->status = $request->status;
             $data->update();
+			
+			$boxcounter = $request->boxcounter[0];
+			for($i=1; $i<=$boxcounter; $i++){
+				
+				$boxes = 'box'.$i;
+				
+				 $options=TreatmentOption::findOrFail($request->$boxes['option_id'][0]);
+				 $options->name=$request->$boxes['option_title'][0];
+					if(isset($request->$boxes['option_imagenew'][0])){
+						$TreatmentoptionImage = time().'.'.$request->$boxes['option_imagenew'][0]->extension(); 
+						$request->$boxes['option_imagenew'][0]->move(public_path('admin_assets\treatment_images'), $TreatmentoptionImage);
+						$options->image=$TreatmentoptionImage;
+					}
+				 $options->status=$request->$boxes['option_status'][0];
+				   $options->update();
+				 
+					 $j=0;
+					 foreach($request->$boxes['option_package_type'] as $package){
+						$optionspackage=TreatmentOptionPackage::findOrFail($request->$boxes['option_package_id'][$j]);
+						$optionspackage->small_name =$request->$boxes['option_subpackage'][$j];
+						$optionspackage->name =$request->$boxes['option_package_title'][$j];
+						$optionspackage->packagetype =$request->$boxes['option_package_type'][$j];
+						$optionspackage->price =$request->$boxes['option_package_price'][$j];
+						$optionspackage->max =$request->$boxes['option_package_max'][$j];
+						$optionspackage->min =$request->$boxes['option_package_min'][$j];
+						 $optionspackage->update();
+						 $j++;
+						}
+				
+			}
 
 
             DB::commit();

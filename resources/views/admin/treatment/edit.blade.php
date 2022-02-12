@@ -52,15 +52,18 @@
                                     </div>
                                 </div>
                             </div>
+							
                            <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Category</label>
+										
                                         <select name="category" class="form-control">
                                             
                                             @foreach($categories as $key=>$val)
 											
-                                            <option value="{{$val->id}}" {{($data->category_id==$val->id)?"selected":''}}>{{$val->name}}</option>
+											
+										<option value="{{$val->id}}" {{( $data->category->id == $val->id)? "selected" :' ' }} >{{$val->name}}</option>
 											
                                             @endforeach
                                         </select>
@@ -104,9 +107,10 @@
                                 </div>
                             </div>
 							<div class="row">
-								<div class="col-lg-6">
-									<image src="{{asset('/admin_assets/treatment_images/')}}/{{ $data->image }}" class="img-responsive"/>
-									<input type="hidden" name="oldimage" value="{{ $data->image }}">
+							<div class="col-lg-2"></div>
+								<div class="col-lg-4">
+									<image src="{{asset('/admin_assets/treatment_images/')}}/{{ $data->image }}" class="img-responsive" width="100%"/>
+									
 								</div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -119,6 +123,7 @@
 							
 							<!-- treatment option form start--->
 							<br/>
+							
 							<div class="row">
 							 <div class="card-header">
 								<div class="row align-items-center">
@@ -131,8 +136,8 @@
 					 @php 
 						$counter=1;
 					 @endphp
-						@foreach($treatmentoptions as $T_options)
-					 
+						@foreach($data->TreatmentOption as $T_options)
+					
 						<div class="addnewtreatmentpackage">
 						<div class="row">
 						<div class="col-lg-11">
@@ -143,13 +148,14 @@
 										<div class="form-group">
 											<label class="form-control-label">Title</label>
 											<input type="text" name="box{{ $counter }}[option_title][]" class="form-control" value="{{ $T_options->name }}">
+											<input type="hidden" name="box{{ $counter }}[option_id][]" class="form-control" value="{{ $T_options->id }}">
 											
 										</div>
 									</div>
 									<div class="col-lg-6">
 									    <div class="row">
 												<div class="col-md-6">
-												<img src="{{asset('/admin_assets/treatment_images/')}}/{{ $T_options->image }}" class="img-responsive"/>
+												<img src="{{asset('/admin_assets/treatment_images/')}}/{{ $T_options->image }}" class="img-responsive" width="100%"/>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">
@@ -170,8 +176,8 @@
 									</div>
 								</div>
 							
-							@foreach($treatmentsoptionspackage as $T_optionspackage)
-								@if($T_options->id==$T_optionspackage->treatmentoption_id)
+							@foreach($T_options->treatmentOptionPackage as $T_optionspackage)
+								
 								<div class="package">
 								<div class="row">
 								 <div class="col-lg-10">
@@ -228,6 +234,7 @@
 												<div class="form-group">
 													<label class="form-control-label">Title</label>
 													<input type="text" name="box{{ $counter }}[option_package_title][]" class="form-control" value="{{ $T_optionspackage->name }}">
+													<input type="hidden" name="box{{ $counter }}[option_package_id][]" class="form-control" value="{{ $T_optionspackage->id }}">
 												</div>
 											</div>
 										</div>
@@ -259,7 +266,7 @@
 								</div>
 								</div>
 							
-								@endif
+								
 							@endforeach
 							</div>
 							</div>
