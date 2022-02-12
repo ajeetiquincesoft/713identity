@@ -517,6 +517,33 @@ class ApiController extends Controller
             ]);
         }
     }
+
+    public function GetAllAppointment(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            // if ($request->date and $request->date != '') {
+            //     $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
+            // } else {
+
+            //     $appointments = $user->appointments()->with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            // }
+            $appointments=Appointment::with('appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+            return response()->json(['success' => true, 'message' => 'All appointments', 'appointments' => $appointments]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
     public function QuestionAnswer(Request $request)
     {
         $validator = Validator::make($request->all(), [
