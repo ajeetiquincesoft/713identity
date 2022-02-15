@@ -423,6 +423,7 @@ class ApiController extends Controller
             'discount_applied' => 'required',
             'packages' => 'required',
             'stripe_token' => 'required',
+            'quantity' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()], 200);
@@ -465,12 +466,13 @@ class ApiController extends Controller
                 $appointment->payment_id = $payment_id;
                 $appointment->save();
                 $appointment_id = $appointment->id;
-                foreach ($request->packages as $package) {
+                foreach ($request->packages as $key=>$package) {
                     $package_data = TreatmentOptionPackage::find($package);
                     $optiion_id = $package_data->treatmentoption_id;
                     $appointent_packages = $appointment->appointmentPackages()->make();
                     $appointent_packages->treatmentoption_id = $optiion_id;
                     $appointent_packages->treatmentoptionpackage_id = $package;
+                    $appointent_packages->quantity = $request->quantity[$key];
                     $appointent_packages->save();
                 }
 

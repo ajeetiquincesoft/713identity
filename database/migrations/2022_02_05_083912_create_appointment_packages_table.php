@@ -21,6 +21,7 @@ class CreateAppointmentPackagesTable extends Migration
             $table->foreign('treatmentoption_id')->references('id')->on('treatment_options');
             $table->bigInteger('treatmentoptionpackage_id')->unsigned();
             $table->foreign('treatmentoptionpackage_id')->references('id')->on('treatment_option_packages');
+            $table->integer('quantity')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
         });
