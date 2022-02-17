@@ -234,14 +234,15 @@ class ApiController extends Controller
     public function getTreatment(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'token' => 'required'
+            'token' => 'required',
+            'id'=>'required'
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()], 200);
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $treatment = Treatment::with(['treatmentOption', 'treatmentOption.treatmentOptionPackage', 'category'])->where('status', 1)->paginate(20);
+            $treatment = Treatment::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage','category'])->where('status', 1)->where('id',$request->id)->first();
 
             return response()->json(['success' => true, 'message' => 'treatments', 'treatment' => $treatment]);
         } else {

@@ -36,7 +36,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('get-articles', [ApiController::class, 'GetArticles']);
     //Doctor Api Start
     Route::get('get-all-appointment', [ApiController::class, 'GetAllAppointment']);
-    Route::get('mark-appointment-status', [ApiController::class, 'markAppointmentStatus']);
+    Route::post('mark-appointment-status', [ApiController::class, 'markAppointmentStatus']);
     Route::get('get-coupons', [ApiController::class, 'GetCoupons']);
     Route::post('add-coupons', [ApiController::class, 'AddCoupons']);
     Route::post('edit-coupons', [ApiController::class, 'EditCoupons']);
