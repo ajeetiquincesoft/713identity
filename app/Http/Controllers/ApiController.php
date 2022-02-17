@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Appointment;
 use App\Models\AppointmentPackages;
+use App\Models\Article;
 use App\Models\Page;
 use App\Models\QuestionAnswer;
 use App\Models\TreatmentOptionPackage;
@@ -626,6 +627,26 @@ class ApiController extends Controller
                 'message' => 'Token is not valid. please contact to the admin.',
             ]);
         }
+    }
+    public function GetArticles(){
+      
+            $validator = Validator::make($request->all(), [
+                'token' => 'required'
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->messages()], 200);
+            }
+            $user = auth('api')->authenticate($request->token);
+            if ($user) {
+                $articles = Article::where('status','1')->get();
+                return response()->json(['success' => true, 'message' => 'all articles', 'data' => $articles]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Token is not valid. please contact to the admin.',
+                ]);
+            }
+        
     }
 
     public function GetCoupons(Request $request)
