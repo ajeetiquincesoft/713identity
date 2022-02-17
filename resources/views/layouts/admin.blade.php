@@ -146,6 +146,12 @@
                                 <span class="nav-link-text">Static Pages</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('article.index') }}">
+                                <i class="fas fa-newspaper"></i>
+                                <span class="nav-link-text">Articles</span>
+                            </a>
+                        </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="#">
                                 <i class="fas fa-comments"></i>

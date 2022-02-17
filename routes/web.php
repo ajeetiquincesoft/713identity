@@ -40,4 +40,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::resource('unavailability', 'UnavailabilityController');
     Route::resource('coupons', 'CouponController');
     Route::resource('questionAnswer', 'QuestionAnswerController');
+    Route::resource('article', 'ArticleController');
 });
