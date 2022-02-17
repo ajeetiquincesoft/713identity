@@ -15,6 +15,6 @@ class Payment extends Model
     }
 
     public function appointent(){
-        return $this->belongsTo(Appointment::class, 'payment_id','id');
+        return $this->hasOne(Appointment::class, 'payment_id','id');
     }
 }
