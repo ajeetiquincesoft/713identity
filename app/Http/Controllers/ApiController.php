@@ -787,7 +787,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $payment = Payment::with('user','appointments.treatment',)->get();
+            $payment = Payment::with('user','appointments',)->get();
             return response()->json(['success' => true, 'message' => 'all payments', 'data' => $payment]);
         } else {
             return response()->json([
