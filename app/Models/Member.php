@@ -71,4 +71,9 @@ class Member extends Model implements JWTSubject, Authenticatable
     {
         return $this->hasMany(Appointment::class, 'user_id', 'id');
     }
+
+    public  function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
 }

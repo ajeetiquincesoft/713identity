@@ -466,7 +466,7 @@ class ApiController extends Controller
                 $appointment->payment_id = $payment_id;
                 $appointment->save();
                 $appointment_id = $appointment->id;
-                foreach ($request->packages as $key=>$package) {
+                foreach ($request->packages as $key => $package) {
                     $package_data = TreatmentOptionPackage::find($package);
                     $optiion_id = $package_data->treatmentoption_id;
                     $appointent_packages = $appointment->appointmentPackages()->make();
@@ -506,10 +506,10 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             if ($request->date and $request->date != '') {
-                $appointments = $user->appointments()->with('treatment','appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
+                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->get();
             } else {
 
-                $appointments = $user->appointments()->with('treatment','appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
+                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->get();
             }
             return response()->json(['success' => true, 'message' => 'question answer', 'appointments' => $appointments]);
         } else {
@@ -769,6 +769,26 @@ class ApiController extends Controller
             $data = Coupon::findOrFail($request->id);
             $data->delete();
             return response()->json(['success' => true, 'message' => 'Deleted Successfully']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        }
+    }
+
+    public function getAllPayments(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+        $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $payment = Payment::with('user')->get();
+            return response()->json(['success' => true, 'message' => 'all payments', 'data' => $payment]);
         } else {
             return response()->json([
                 'success' => false,

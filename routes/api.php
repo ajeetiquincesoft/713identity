@@ -40,4 +40,5 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::post('add-coupons', [ApiController::class, 'AddCoupons']);
     Route::post('edit-coupons', [ApiController::class, 'EditCoupons']);
     Route::post('delete-coupons', [ApiController::class, 'DeleteCoupons']);
+    Route::post('get-all-payments', [ApiController::class, 'getAllPayments']);
 });
