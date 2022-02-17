@@ -21,7 +21,7 @@ Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('get_user', [ApiController::class, 'get_user']);
     Route::get('logout', [ApiController::class, 'logout']);
     Route::post('update-profile',[ApiController::class,'updateProfile']);
-    // Route::get('treatment', [ApiController::class, 'getTreatment']);
+    Route::get('treatment', [ApiController::class, 'getTreatment']);
     Route::get('popular-treatment', [ApiController::class, 'getPopularTreatment']);
     Route::get('category-treatment', [ApiController::class, 'getCategoryWithTreatment']);
     Route::get('availability', [ApiController::class, 'getAvailability']);
