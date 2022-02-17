@@ -64,6 +64,10 @@ class ArticleController extends Controller
             $data->content = $request->content;
             $data->meta_data = $request->meta_data;
             $data->meta_description = $request->meta_description;
+            if ($request->hasFile('image')) {
+
+                $data->image = $data->upload_image($request->image);
+            }
             $data->status = $request->status;
             $data->save();
 
@@ -115,32 +119,35 @@ class ArticleController extends Controller
             'content' => 'required',
             'status' => 'required'
         ]);
-        try{
+        try {
             DB::beginTransaction();
-			$slug = null;
-			 if(isset($request->title) && !empty( $request->title)){
-            $slug = preg_replace("/-$/","",preg_replace('/[^a-z0-9]+/i', "-", strtolower( $request->title)));
-			}
+            $slug = null;
+            if (isset($request->title) && !empty($request->title)) {
+                $slug = preg_replace("/-$/", "", preg_replace('/[^a-z0-9]+/i', "-", strtolower($request->title)));
+            }
 
-			/* if(!empty($slug) && $slug != null){
+            /* if(!empty($slug) && $slug != null){
 				$is_slug_exist = page::where('slug', $slug)->first();
 				if($is_slug_exist){
 					return redirect()->route('page.create')->with('Slug already exists.');
 				}
 			} */
             $data = Article::findOrFail($id);
-			$data->title = $request->title;
+            $data->title = $request->title;
             $data->content = $request->content;
             $data->meta_data = $request->meta_data;
             $data->meta_description = $request->meta_description;
+            if ($request->hasFile('image')) {
+
+                $data->image = $data->upload_image($request->image);
+            }
             $data->status = $request->status;
             $data->update();
 
 
             DB::commit();
             return redirect()->route('article.index')->withSuccess('Updated successfully');
-
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
             return back()->withErrors($e->getMessage())->withInput($request->all());
         }

@@ -50,54 +50,65 @@
                                         @error('title')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                               
+
                             </div>
-							<div class="row">
-							 <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Meta Data</label>
                                         <input type="text" name="meta_data" class="form-control" value="{{ old('meta_data') }}">
                                         @error('meta_data')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                               
-                               
+
+
                             </div>
-							<div class="row">
-							  <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Meta Description</label>
                                         <input type="text" name="meta_description" class="form-control" value="{{ old('title') }}">
                                         @error('meta_description')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                             </div>
-							<div class="row">
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
-										<select name="status" class="form-control">
-										<option value="1" >Active</option>
-										<option value="0">InActive</option>
-										</select>
-                                        
+                                        <select name="status" class="form-control">
+                                            <option value="1">Active</option>
+                                            <option value="0">InActive</option>
+                                        </select>
+
                                         @error('status')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                
-								 <div class="col-lg-12">
+
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">content</label>
-										<textarea id="summernote" name="content" class="summernote form-control" ></textarea>
-                                        
+                                        <textarea id="summernote" name="content" class="summernote form-control"></textarea>
+
                                         @error('content')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
                             </div>
-							
-							
+                            <div class="row">
+
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Image</label>
+
+                                        <input type="file" name="image">
+
+                                        @error('image')<div class="text-danger">{{ $message }}*</div>@enderror
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <button type="submit" class="btn btn-dark">Submit</button>

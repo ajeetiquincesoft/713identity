@@ -41,9 +41,9 @@
                     @endif
                     <form method="post" action="{{ route('article.update',$data->id) }}" enctype="multipart/form-data">
                         @csrf
-						{{ method_field('PUT') }}
-                       
-						<div class="pl-lg-4">
+                        {{ method_field('PUT') }}
+
+                        <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -52,54 +52,70 @@
                                         @error('title')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                               
+
                             </div>
-							<div class="row">
-							 <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Meta Data</label>
                                         <input type="text" name="meta_data" class="form-control" value="{{ $data->meta_data }}">
                                         @error('meta_data')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                               
-                               
+
+
                             </div>
-							<div class="row">
-							  <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Meta Description</label>
                                         <input type="text" name="meta_description" class="form-control" value="{{ $data->meta_description }}">
                                         @error('meta_description')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
-                             </div>
-							<div class="row">
+                            </div>
+                            <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Status</label>
-										<select name="status" class="form-control">
-										<option value="1" {{($data->status==1)?"selected":''}}>Active</option>
-										<option value="0" {{($data->status==0)?"selected":''}}>InActive</option>
-										</select>
-                                        
+                                        <select name="status" class="form-control">
+                                            <option value="1" {{($data->status==1)?"selected":''}}>Active</option>
+                                            <option value="0" {{($data->status==0)?"selected":''}}>InActive</option>
+                                        </select>
+
                                         @error('status')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                
-								 <div class="col-lg-12">
+
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="form-control-label">Page content</label>
-										<textarea id="summernote" name="content" class="summernote form-control" >{{ $data->content }}</textarea>
-                                        
+                                        <textarea id="summernote" name="content" class="summernote form-control">{{ $data->content }}</textarea>
+
                                         @error('content')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
                                 </div>
                             </div>
-							
-							
+                            <div class="row">
+                               
+                                <div class="col-lg-4">
+
+                                    <image src="{{$data->img}}" class="img-responsive" width="100%" />
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Upload New Image</label>
+                                        <input type="file" name="image" style="width: 100%;padding-top: 40px;">
+                                        @error('image')<div class="text-danger">{{ $message }}*</div>@enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <button type="submit" class="btn btn-dark">Submit</button>
