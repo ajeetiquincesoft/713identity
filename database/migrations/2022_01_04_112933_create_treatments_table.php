@@ -22,6 +22,7 @@ class CreateTreatmentsTable extends Migration
             $table->string('short_description')->nullable();
             $table->string('description')->nullable();
             $table->longText('image')->nullable();
+            $table->longText('qr_code')->nullable();
             $table->integer('status')->default(1); 
             $table->integer('popular')->default(0); 
             $table->timestamps();
