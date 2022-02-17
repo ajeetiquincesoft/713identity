@@ -628,7 +628,7 @@ class ApiController extends Controller
             ]);
         }
     }
-    public function GetArticles(){
+    public function GetArticles(Request $request){
       
             $validator = Validator::make($request->all(), [
                 'token' => 'required'
