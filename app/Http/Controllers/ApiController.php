@@ -573,8 +573,6 @@ class ApiController extends Controller
     } 
 	public function rescheduleAppointment(Request $request)
     {
-		
-		echo "hello";
         $validator = Validator::make($request->all(), [
             'token' => 'required',
             'id' => 'required',
@@ -585,8 +583,9 @@ class ApiController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()], 200);
         }
-       /*  $user = auth('api')->authenticate($request->token);
-        if ($user) {
+        $user = auth('api')->authenticate($request->token);
+		print_r($request->all());
+        /* if ($user) {
             $appointment = Appointment::find($request->id);
             $appointment->status = $request->status;
             $appointment->save();
@@ -596,7 +595,7 @@ class ApiController extends Controller
                 'success' => false,
                 'message' => 'Token is not valid. please contact to the admin.',
             ]);
-        } */
+        } */ 
     }
     public function QuestionAnswer(Request $request)
     {
