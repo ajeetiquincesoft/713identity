@@ -593,7 +593,7 @@ class ApiController extends Controller
             $appointment->update();
 			return response()->json(['success' => true, 'message' => 'Rescheduled Successfully.']);
 			}else{
-				return response()->json(['success' => false, 'message' => 'Already completed reschedule.']);
+				return response()->json(['success' => false, 'message' => 'Appointment already completed.']);
 			}
            
         } else {
