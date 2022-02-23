@@ -584,9 +584,11 @@ class ApiController extends Controller
             return response()->json(['error' => $validator->messages()], 200);
         }
         $user = auth('api')->authenticate($request->token);
-		print_r($request->all());
-        /* if ($user) {
+		
+        if ($user) {
             $appointment = Appointment::find($request->id);
+			echo'hey'. $appointment->status;
+			die;
             $appointment->status = $request->status;
             $appointment->save();
             return response()->json(['success' => true, 'message' => 'Status Updated Successfully.']);
@@ -595,7 +597,7 @@ class ApiController extends Controller
                 'success' => false,
                 'message' => 'Token is not valid. please contact to the admin.',
             ]);
-        } */ 
+        } 
     }
     public function QuestionAnswer(Request $request)
     {
