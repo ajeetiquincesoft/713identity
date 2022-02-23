@@ -570,6 +570,33 @@ class ApiController extends Controller
                 'message' => 'Token is not valid. please contact to the admin.',
             ]);
         }
+    } 
+	public function rescheduleAppointment(Request $request)
+    {
+		
+		echo "hello";
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'id' => 'required',
+            'date' => 'required',
+			'time'=>'required'
+			
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 200);
+        }
+       /*  $user = auth('api')->authenticate($request->token);
+        if ($user) {
+            $appointment = Appointment::find($request->id);
+            $appointment->status = $request->status;
+            $appointment->save();
+            return response()->json(['success' => true, 'message' => 'Status Updated Successfully.']);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Token is not valid. please contact to the admin.',
+            ]);
+        } */
     }
     public function QuestionAnswer(Request $request)
     {

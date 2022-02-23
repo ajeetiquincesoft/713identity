@@ -109,7 +109,7 @@
 							<div class="row">
 							<div class="col-lg-2"></div>
 								<div class="col-lg-4">
-									<image src="{{asset('/admin_assets/treatment_images/')}}/{{ $data->image }}" class="img-responsive" width="100%"/>
+									<image  src="{{ $data->img }}" class="img-responsive" width="100%"/>
 									
 								</div>
                                 <div class="col-lg-6">
@@ -155,7 +155,7 @@
 									<div class="col-lg-6">
 									    <div class="row">
 												<div class="col-md-6">
-												<img src="{{asset('/admin_assets/treatment_images/')}}/{{ $T_options->image }}" class="img-responsive" width="100%"/>
+												<img src="{{ $T_options->img }}" class="img-responsive" width="100%"/>
 												</div>
 												<div class="col-md-6">
 													<div class="form-group">

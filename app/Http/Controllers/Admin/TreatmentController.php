@@ -9,6 +9,7 @@ use App\Models\Treatment;
 use App\Models\TreatmentOption;
 use App\Models\TreatmentOptionPackage;
 use Illuminate\Support\Facades\DB;
+use QrCode;
 class TreatmentController extends Controller
 {
     /**
@@ -41,7 +42,13 @@ class TreatmentController extends Controller
      */
     public function store(Request $request)
     {
-		
+		phpinfo();
+		die;
+		$test = \QrCode::size(500)->format('png')->generate('ItSolutionStuff.com', public_path('images/qrcode.png'));
+		echo $test;
+		echo "hello";
+		//print_r($request->all());
+		die;
         $validatedData = $request->validate([
             'title' 				=> 'required',
             'category' 				=> 'required',
@@ -64,9 +71,6 @@ class TreatmentController extends Controller
                 }
             } 
 			
-			$TreatmentImage = time().'.'.$request->image->extension();  
-			$request->image->move(public_path('admin_assets\treatment_images'), $TreatmentImage);
-		
             $data = Treatment::make();
             $data->title = $request->title;
             $data->slug = $slug;
@@ -74,7 +78,9 @@ class TreatmentController extends Controller
             $data->short_description = $request->short_description;
             $data->description = $request->description;
             $data->status = $request->status;
-			$data->image = $TreatmentImage;
+			if ($request->hasFile('image')) {
+                $data->image = $data->upload_image($request->image);
+            }
             $data->save();
 		
 					
@@ -82,19 +88,15 @@ class TreatmentController extends Controller
 				$boxcounter = $request->boxcounter;
 				for($i=1; $i<=$boxcounter; $i++){
 					$boxes = 'box'.$i;
-					$TreatmentoptionImage = time().'.'.$request->$boxes['option_image'][0]->extension(); 
-					$request->$boxes['option_image'][0]->move(public_path('admin_assets\treatment_images'), $TreatmentoptionImage);
-					
-					
 					$options=$data->treatmentOption()->make();
 					 $options->name=$request->$boxes['option_title'][0];
-					 $options->image=$TreatmentoptionImage;
-					 $options->status=$request->$boxes['option_status'][0];
-					 
+					if (isset($request->$boxes['option_image'][0])) {
+						 $options->image = $options->upload_image($request->$boxes['option_image'][0]);
+					 } 
+					 $options->status=$request->$boxes['option_status'][0]; 
 					 $options->save();
 					 $j=0;
 					  $treatment_id=$data->id;
-					 
 					 foreach($request->$boxes['option_package_type'] as $package){
 						 //echo $request->$boxes['option_subpackage'][$j];
 						$optionspackage=TreatmentOptionPackage::make();
