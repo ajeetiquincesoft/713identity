@@ -587,11 +587,15 @@ class ApiController extends Controller
 		
         if ($user) {
             $appointment = Appointment::find($request->id);
-			echo'hey'. $appointment->status;
-			die;
-            $appointment->status = $request->status;
-            $appointment->save();
-            return response()->json(['success' => true, 'message' => 'Status Updated Successfully.']);
+			if($appointment->status==1){
+            $appointment->date = $request->date;
+			$appointment->time = $request->time;
+            $appointment->update();
+			return response()->json(['success' => true, 'message' => 'Rescheduled Successfully.']);
+			}else{
+				return response()->json(['success' => false, 'message' => 'Already completed reschedule.']);
+			}
+           
         } else {
             return response()->json([
                 'success' => false,
