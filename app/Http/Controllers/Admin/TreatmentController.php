@@ -41,14 +41,7 @@ class TreatmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-		phpinfo();
-		die;
-		$test = \QrCode::size(500)->format('png')->generate('ItSolutionStuff.com', public_path('images/qrcode.png'));
-		echo $test;
-		echo "hello";
-		//print_r($request->all());
-		die;
+    { 	
         $validatedData = $request->validate([
             'title' 				=> 'required',
             'category' 				=> 'required',
@@ -78,11 +71,20 @@ class TreatmentController extends Controller
             $data->short_description = $request->short_description;
             $data->description = $request->description;
             $data->status = $request->status;
+			
 			if ($request->hasFile('image')) {
                 $data->image = $data->upload_image($request->image);
-            }
+            } 
+			
+			
             $data->save();
-		
+		// add qr code for treatment
+		  $treatment = Treatment::findOrFail($data->id);
+		  $qrcode = \QrCode::format('png')
+							 ->size(200)->errorCorrection('H')
+							 ->generate($data->id,'storage/qrcode_'.$data->id.'.png');
+			$treatment->qr_code='qrcode_'.$data->id.'.png';
+			$treatment->update();
 					
 			// options tables data inserting
 				$boxcounter = $request->boxcounter;
@@ -148,7 +150,7 @@ class TreatmentController extends Controller
 		//dd($categories);
 		
 		$treatments = Treatment::with('TreatmentOption','TreatmentOption.treatmentOptionPackage','category')->find($id);
-		
+	
 		 return view('admin/treatment/edit', ['categories'=>$categories, 'data' => $treatments]);
     }
 
@@ -161,7 +163,7 @@ class TreatmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-
+	
        $validatedData = $request->validate([
             'title' 				=> 'required',
             'category' 				=> 'required',
@@ -176,42 +178,87 @@ class TreatmentController extends Controller
             $data->category_id   = $request->category;
             $data->short_description = $request->short_description;
             $data->description = $request->description;
-			if($request->treatmentimagenew){
-				$TreatNewImage = time().'.'.$request->treatmentimagenew->extension();  
-				$request->treatmentimagenew->move(public_path('admin_assets\treatment_images'), $TreatNewImage);
-				$data->image = $TreatNewImage;
-			}
+			if ($request->hasFile('treatmentimagenew')) {
+                $data->image = $data->upload_image($request->treatmentimagenew);
+            } 
 			
 			$data->status = $request->status;
             $data->update();
 			
-			$boxcounter = $request->boxcounter[0];
+		 $boxcounter = $request->boxcounter[0];
+	
 			for($i=1; $i<=$boxcounter; $i++){
 				
 				$boxes = 'box'.$i;
+			    $treatment_id=$id;
 				
+				if(@$request->$boxes['option_id'][0]){
+					
 				 $options=TreatmentOption::findOrFail($request->$boxes['option_id'][0]);
 				 $options->name=$request->$boxes['option_title'][0];
-					if(isset($request->$boxes['option_imagenew'][0])){
-						$TreatmentoptionImage = time().'.'.$request->$boxes['option_imagenew'][0]->extension(); 
-						$request->$boxes['option_imagenew'][0]->move(public_path('admin_assets\treatment_images'), $TreatmentoptionImage);
-						$options->image=$TreatmentoptionImage;
-					}
+				
+				 if(isset($request->$boxes['option_imagenew'][0])) {
+						 $options->image = $options->upload_image($request->$boxes['option_imagenew'][0]);
+					 } 
 				 $options->status=$request->$boxes['option_status'][0];
-				   $options->update();
-				 
+				 $options->update();
+				  $j=0;
+				 foreach($request->$boxes['option_package_type'] as $package){
+					
+					 if(isset($request->$boxes['option_package_id'][$j])){
+							$optionspackage=TreatmentOptionPackage::findOrFail($request->$boxes['option_package_id'][$j]);
+							$optionspackage->small_name =$request->$boxes['option_subpackage'][$j];
+							$optionspackage->name =$request->$boxes['option_package_title'][$j];
+							$optionspackage->packagetype =$request->$boxes['option_package_type'][$j];
+							$optionspackage->price =$request->$boxes['option_package_price'][$j];
+							$optionspackage->max =$request->$boxes['option_package_max'][$j];
+							$optionspackage->min =$request->$boxes['option_package_min'][$j];
+							 $optionspackage->update();
+					 }elseif($request->$boxes['option_id'][0]){
+							
+							$optionspackage=TreatmentOptionPackage::make();
+							$optionspackage->treatment_id =$treatment_id;
+							$optionspackage->treatmentoption_id =$request->$boxes['option_id'][0];
+							$optionspackage->small_name =$request->$boxes['option_subpackage'][$j];
+							$optionspackage->name =$request->$boxes['option_package_title'][$j];
+							$optionspackage->packagetype =$request->$boxes['option_package_type'][$j];
+							$optionspackage->price =$request->$boxes['option_package_price'][$j];
+							$optionspackage->max =$request->$boxes['option_package_max'][$j];
+							$optionspackage->min =$request->$boxes['option_package_min'][$j];
+							 $optionspackage->save(); 
+						 
+					 }
+					 $j++;
+					}
+				   
+				}else{
+					
+					$options_new=TreatmentOption::make();
+					 $options_new->name=$request->$boxes['option_title'][0];
+					if (isset($request->$boxes['option_image'][0])) {
+						 $options_new->image = $options_new->upload_image($request->$boxes['option_image'][0]);
+					 } 
+					 $options_new->treatment_id=$treatment_id;  
+					 $options_new->status=$request->$boxes['option_status'][0]; 
+					 $options_new->save();
 					 $j=0;
 					 foreach($request->$boxes['option_package_type'] as $package){
-						$optionspackage=TreatmentOptionPackage::findOrFail($request->$boxes['option_package_id'][$j]);
+						 //echo $request->$boxes['option_subpackage'][$j];
+						$optionspackage=TreatmentOptionPackage::make();
+						$optionspackage->treatment_id =$treatment_id;
+						$optionspackage->treatmentoption_id =$options_new->id;
 						$optionspackage->small_name =$request->$boxes['option_subpackage'][$j];
 						$optionspackage->name =$request->$boxes['option_package_title'][$j];
 						$optionspackage->packagetype =$request->$boxes['option_package_type'][$j];
 						$optionspackage->price =$request->$boxes['option_package_price'][$j];
 						$optionspackage->max =$request->$boxes['option_package_max'][$j];
 						$optionspackage->min =$request->$boxes['option_package_min'][$j];
-						 $optionspackage->update();
+						 $optionspackage->save();
 						 $j++;
 						}
+					
+				}
+					
 				
 			}
 
