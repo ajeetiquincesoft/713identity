@@ -242,7 +242,8 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $treatment = Treatment::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage','category'])->where('status', 1)->where('id',$request->id)->first();
+            //$treatment = Treatment::with(['treatment', 'treatment.treatmentOption', 'treatment.treatmentOption.treatmentOptionPackage','category'])->where('status', 1)->where('id',$request->id)->first();
+			$treatment = Treatment::with('TreatmentOption','TreatmentOption.treatmentOptionPackage','category')->find($request->id);
 
             return response()->json(['success' => true, 'message' => 'treatments', 'treatment' => $treatment]);
         } else {
