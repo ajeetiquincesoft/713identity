@@ -17,6 +17,7 @@ class CreateTreatmentsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('slug')->nullable();
+			$table->string('treatment_type')->unsigned();
             $table->bigInteger('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->string('short_description')->nullable();

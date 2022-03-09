@@ -52,6 +52,20 @@
                                     </div>
                                 </div>
                             </div>
+						    <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Treatment Type</label>
+                                        <select name="treatment_type" class="form-control">
+                                            <option value="">Treatment type</option>
+                                            <option value="body">Body</option>
+											<option value="face">Face</option> 
+                                        </select>
+
+                                        @error('treatment_type')<div class="text-danger">{{ $message }}*</div>@enderror
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">

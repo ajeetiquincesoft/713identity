@@ -41,10 +41,11 @@ class TreatmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 	
+    { 
         $validatedData = $request->validate([
             'title' 				=> 'required',
-            'category' 				=> 'required',
+            'treatment_type' 		=> 'required',
+			'category' 				=> 'required',
             'status' 				=> 'required',
 			'image' 				=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 			
@@ -67,6 +68,7 @@ class TreatmentController extends Controller
             $data = Treatment::make();
             $data->title = $request->title;
             $data->slug = $slug;
+			$data->treatment_type = $request->treatment_type;
             $data->category_id   = $request->category;
             $data->short_description = $request->short_description;
             $data->description = $request->description;
