@@ -152,7 +152,7 @@ class TreatmentController extends Controller
 		//dd($categories);
 		
 		$treatments = Treatment::with('TreatmentOption','TreatmentOption.treatmentOptionPackage','category')->find($id);
-	
+		
 		 return view('admin/treatment/edit', ['categories'=>$categories, 'data' => $treatments]);
     }
 
@@ -168,7 +168,8 @@ class TreatmentController extends Controller
 	
        $validatedData = $request->validate([
             'title' 				=> 'required',
-            'category' 				=> 'required',
+            'treatment_type' 		=> 'required',
+			'category' 				=> 'required',
             'status' 				=> 'required',
 			
         ]);
@@ -177,6 +178,7 @@ class TreatmentController extends Controller
 			
             $data = Treatment::findOrFail($id);
 			$data->title = $request->title;
+			$data->treatment_type = $request->treatment_type;
             $data->category_id   = $request->category;
             $data->short_description = $request->short_description;
             $data->description = $request->description;

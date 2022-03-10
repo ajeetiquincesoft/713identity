@@ -58,8 +58,8 @@
                                         <label class="form-control-label">Treatment Type</label>
                                         <select name="treatment_type" class="form-control">
                                             <option value="">Treatment type</option>
-                                            <option value="body">Body</option>
-											<option value="face">Face</option> 
+											<option value="body" {{( $data->treatment_type == 'body')? "selected" :' ' }}>Body</option>
+											<option value="face" {{( $data->treatment_type == 'face')? "selected" :' ' }}>Face</option> 
                                         </select>
                                         @error('treatment_type')<div class="text-danger">{{ $message }}*</div>@enderror
                                     </div>
