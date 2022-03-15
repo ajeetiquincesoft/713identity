@@ -832,7 +832,7 @@ class ApiController extends Controller
         }
     }
 
-    public function getAllPayments(Request $request)
+    public function getAllPayments(Request $request,$page)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required'
@@ -842,7 +842,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $payment = Payment::with('user','appointent.treatment')->get();
+            $payment = Payment::with('user','appointent.treatment')->paginate($page);
             return response()->json(['success' => true, 'message' => 'all payments', 'data' => $payment]);
         } else {
             return response()->json([

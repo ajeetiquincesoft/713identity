@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Auth::routes([
     'register' => false, // Registration Routes...
     'reset' => false, // Password Reset Routes...
@@ -42,3 +44,5 @@ Route::namespace('Admin')->prefix('Admin')->middleware('auth')->group(function (
     Route::resource('questionAnswer', 'QuestionAnswerController');
     Route::resource('article', 'ArticleController');
 });
+
+Route::get('/{slug}', [App\Http\Controllers\FrontController::class, 'show']);
