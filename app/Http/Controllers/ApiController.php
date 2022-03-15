@@ -832,8 +832,9 @@ class ApiController extends Controller
         }
     }
 
-    public function getAllPayments(Request $request,$page)
-    {
+    public function getAllPayments(Request $request)
+    {    
+		print_r($request->all());
         $validator = Validator::make($request->all(), [
             'token' => 'required'
         ]);
