@@ -843,7 +843,7 @@ class ApiController extends Controller
         }
         $user = auth('api')->authenticate($request->token);
         if ($user) {
-            $payment = Payment::with('user','appointent.treatment')->paginate(10);
+            $payment = Payment::with('user','appointent.treatment')-> orderBy('payment_date', 'desc')->paginate(10);
             return response()->json(['success' => true, 'message' => 'all payments', 'data' => $payment]);
         } else {
             return response()->json([
