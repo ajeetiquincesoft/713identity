@@ -509,10 +509,10 @@ class ApiController extends Controller
         $user = auth('api')->authenticate($request->token);
         if ($user) {
             if ($request->date and $request->date != '') {
-                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->paginate(10);
+                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->where('date', '=', $request->date)->orderBy('date','desc')->paginate(10);
             } else {
 
-                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->paginate(10);
+                $appointments = $user->appointments()->with('treatment', 'appointmentPackages', 'appointmentPayment', 'appointmentPackages.treatmentOptionPackage')->orderBy('date','desc')->paginate(10);
             }
             return response()->json(['success' => true, 'message' => 'question answer', 'appointments' => $appointments]);
         } else {
